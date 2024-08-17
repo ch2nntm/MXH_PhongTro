@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
 import { RegisterService } from '../../services/register/register.service';
 import { PostsService } from '../../services/post/posts.service';
-import { AuthserviceService } from '../../services/authservice.service';
-import { TokenStoreService } from '../../services/token-store.service';
+import { AuthserviceService } from '../../services/auth/authservice.service';
+import { TokenStoreService } from '../../services/token-store/token-store.service';
 
 @Component({
   selector: 'app-register',
@@ -93,7 +93,8 @@ export class RegisterComponent implements OnInit{
     email: '',
     phone: '',
     address_user: '',
-    password: ''
+    password: '',
+    roles: ''
   };
 
   OnSubmit(): void {
@@ -103,7 +104,16 @@ export class RegisterComponent implements OnInit{
       this._auth.login({ email: this.emaillogin, password: this.passwordlogin })
         .subscribe(
           (actor) => {
-            console.log(actor.roles);
+            console.log("Actor: "+actor.roles);
+            let user={
+              roles : actor.roles,
+              name: actor.name,
+              email: actor.email,
+              phone: actor.phone,
+              address_user: actor.address_user,
+              password: actor.password,
+            }
+
             if (actor.roles == 'user') {
               this._router.navigate(['/uiuser'], { queryParams: { name: actor.name } }); // Điều hướng tới trang User
               this.isLoggedIn=true;

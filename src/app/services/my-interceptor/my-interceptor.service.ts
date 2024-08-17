@@ -6,12 +6,12 @@ import {
   HttpHandler,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import { TokenStoreService } from './token-store.service';
+import { TokenStoreService } from '../token-store/token-store.service';
 import { Observable } from 'rxjs';
 
 const TOKEN_HEADER_KEY = 'Authorization'; // It's common to use 'Authorization' for the token header
 
-@Injectable()
+@Injectable() //Hàm đặt lại
 export class MyInterceptor implements HttpInterceptor {
   constructor(private _token: TokenStoreService) {}
 
@@ -26,10 +26,11 @@ export class MyInterceptor implements HttpInterceptor {
         headers: req.headers.set(TOKEN_HEADER_KEY, `Bearer ${token}`),
       });
     }
+    // console.log("Authreq: "+authReq.headers.getAll);
     return next.handle(authReq);
   }
 }
 
-export const authInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
-];
+// export const authInterceptorProviders = [
+//   { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+// ];

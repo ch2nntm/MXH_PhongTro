@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../../models/post/post';
 import { PostsService } from '../../services/post/posts.service';
-import { ManagePostService } from '../../services/manage-post.service';
-import { TokenStoreService } from '../../services/token-store.service';
+import { ManagePostService } from '../../services/manage-post/manage-post.service';
+import { TokenStoreService } from '../../services/token-store/token-store.service';
+import { response } from 'express';
+import { AccountUserService } from '../../services/account-user/account-user.service';
 
 @Component({
   selector: 'app-post-management',
@@ -14,6 +16,8 @@ export class PostManagementComponent implements OnInit{
   quantityActive=0;
   quantityBan=0;
   posts: Post[] = [];
+  user: any;
+  content: any;
 
   items = [
     { label: 'Hoạt động', status: 'active' },
@@ -70,9 +74,8 @@ export class PostManagementComponent implements OnInit{
     this.itemClick=item.status;
   }
 
-  constructor(private postService: PostsService, private manage_post: ManagePostService, private token : TokenStoreService) {
-   
-  }
+  constructor(private postService: PostsService, private manage_post: ManagePostService, 
+            private _account_user: AccountUserService) {}
 
   ListPosts(statust: string): void {
     this.manage_post.getPost().subscribe(
@@ -112,13 +115,33 @@ export class PostManagementComponent implements OnInit{
 
   ngOnInit(): void {
     //this.ListPosts('active');
-    const token = this.token.getUser();
-    if(token.roles ==="admin"){
-      this.manage_post.getPost1().subscribe(
-        response => {
-          this.posts=response;
-     } );
-    }
+    // const token = this.token.getUser();
+    // if(token.roles ==="admin"){
+    //   this.manage_post.getPost1().subscribe(
+    //     response => {
+    //       this.posts=response;
+    //  } );
+    // }
+
+    
+    // this._account_user.getPost().subscribe(
+    //   (response => {
+    //     this.content=response;
+    //     console.log("Content1: ",response);
+    //     console.log("Content2: ",this.content);
+    //   })
+    // )
+
+    this.manage_post.getPost1().subscribe(
+      (response => {
+        if(response.status == "ok"){
+          this.user=response;
+        }
+        else{
+          console.log("Unsuccessful");
+        }
+      })
+    )
   }
 
   ChangeToBan(item: any){}

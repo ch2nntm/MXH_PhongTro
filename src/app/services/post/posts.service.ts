@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
-import { ApiService } from '../api.service';
-import { TokenStoreService } from '../token-store.service';
+import { ApiService } from '../api/api.service';
+import { TokenStoreService } from '../token-store/token-store.service';
 import { Post } from '../../models/post/post';
 
 @Injectable({
@@ -11,7 +11,6 @@ import { Post } from '../../models/post/post';
 export class PostsService {
   private userSubject : BehaviorSubject<any>;
   public user : Observable<any>;
-  // private baseUrl: string = 'http://localhost:5000/api/home/';
 
   constructor (private _api: ApiService, private _token: TokenStoreService) {
     this.userSubject = new BehaviorSubject<any>(this._token.getUser());

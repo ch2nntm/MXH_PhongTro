@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, throwError } from 'rxjs';
-import { ApiService } from '../api.service';
-import { TokenStoreService } from '../token-store.service';
+import { ApiService } from '../api/api.service';
+import { TokenStoreService } from '../token-store/token-store.service';
 
 @Injectable({
   providedIn: 'root'

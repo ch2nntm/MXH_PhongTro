@@ -41,8 +41,9 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { NewListContentComponent } from './components/new-list-content/new-list-content.component';
 import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterOwnerContentComponent } from './components/register-owner-content/register-owner-content.component';
-import { AuthGuardService } from './services/authguardservice.guard';
-import { authInterceptorProviders, MyInterceptor } from './services/my-interceptor.service';
+import { AuthGuardService } from './services/authguard/authguardservice.guard';
+import { MyInterceptor } from './services/my-interceptor/my-interceptor.service';
+
 
 @NgModule({
   declarations: [
@@ -105,7 +106,9 @@ import { authInterceptorProviders, MyInterceptor } from './services/my-intercept
   providers: [
     provideClientHydration(),
     AuthGuardService,
-    authInterceptorProviders, 
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    
+    // authInterceptorProviders, 
   ],
   bootstrap: [AppComponent]
 })

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login/login.service';
-import { TokenStoreService } from '../../services/token-store.service';
-import { AuthserviceService } from '../../services/authservice.service';
+import { TokenStoreService } from '../../services/token-store/token-store.service';
+import { AuthserviceService } from '../../services/auth/authservice.service';
 
 @Component({
   selector: 'app-uiuser',

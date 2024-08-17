@@ -1,14 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TokenStoreService } from '../token-store/token-store.service';
 import { map, Observable } from 'rxjs';
-import { AuthserviceService } from './authservice.service';
-import { TokenStoreService } from './token-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ManagePostService {
-  private apiUrl='http://localhost:5000/api/admin/management-user';
+export class AccountUserService {
+  private apiUrl='http://localhost:5000/api/my-content';
   constructor(private http: HttpClient, private token: TokenStoreService) { }
 
   getPost(): Observable<any>{
@@ -19,17 +18,13 @@ export class ManagePostService {
       'Accept': 'application/json'
     });
      console.log(headers)
-    // return this.http.get(this.apiUrl);
+    return this.http.get(this.apiUrl);
 
     return this.http.get(`${this.apiUrl}` , {headers}).pipe(
       map((res) => {
         return res;
       })
     );
+    
   }
-  getPost1(): Observable<any>{
-    return this.http.get<any>(`${this.apiUrl}`);
-  }
-
-
 }

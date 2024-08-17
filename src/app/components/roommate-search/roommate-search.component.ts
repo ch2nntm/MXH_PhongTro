@@ -5,6 +5,7 @@ import { Post } from '../../models/post/post';
 import { PostsService } from '../../services/post/posts.service';
 import { Router } from '@angular/router';
 import e from 'express';
+import { AccountUserService } from '../../services/account-user/account-user.service';
 
 interface Location {
   Id: string;
@@ -29,7 +30,6 @@ interface Ward {
   styleUrl: './roommate-search.component.css'
 })
 export class RoommateSearchComponent {
-  infs: Post[] = [];
   Array_Price = [
     { min: 0, max: 500000000, label: 'Tất cả giá thành'},
     { min: 0, max: 1000000, label: 'Dưới 1 triệu' },
@@ -50,6 +50,7 @@ export class RoommateSearchComponent {
     { min: 100, max: 1000, label: 'Từ 100m2 trở lên' }
   ];
 
+  infs: Post[] = [];
   startPrice=this.Array_Price[0].min;
   endPrice=this.Array_Price[this.Array_Price.length-1].max;
   startAcreage=this.Array_Acreage[0].min;
@@ -66,14 +67,23 @@ export class RoommateSearchComponent {
 
   private apiUrl = 'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json';
 
-  constructor(private http: HttpClient, private postService: PostsService, private router: Router) {
-    this.ListPosts();
-    console.log("End: ",this.Array_Acreage[this.Array_Acreage.length-1].max);
+  constructor(private http: HttpClient, private postService: PostsService, 
+    private router: Router, private _user: AccountUserService) {
+    // this.ListPosts();
+    // console.log("End: ",this.Array_Acreage[this.Array_Acreage.length-1].max);
   }
 
+  content:any;
   ngOnInit(): void {
     this.FetchCities();
     this.ListPosts();
+    // this._user.getPost().subscribe(
+    //   (response => {
+    //     this.content=response;
+    //     console.log("Content1: ",response);
+    //     console.log("Content2: ",this.content);
+    //   })
+    // )
   }
 
   ToggleArrow(item: string) {
@@ -82,22 +92,10 @@ export class RoommateSearchComponent {
     } else {
       this.activeItem = item;
     }
-    
     this.isClickBtnKind = (this.activeItem === 'kind');
     this.isClickBtnAddress = (this.activeItem === 'address');
     this.isClickBtnAcreage = (this.activeItem === 'acreage');
     this.isClickBtnPrice = (this.activeItem === 'price');
-  }
-  
-
-  UpdateTypeHome(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.selectedCategory = inputElement.value;
-  }
-
-  SearchCategory(event: Event){
-    this.searchCategory=this.selectedCategory;
-    this.isClickSearch = true;
   }
 
   ResetAll(){
@@ -114,25 +112,9 @@ export class RoommateSearchComponent {
     this.ListPosts();
   }
 
-  ResetTypeHome(){
-    this.searchCategory='Tất cả';
-  }
-
   SetAllPrice(){
     this.startPrice=0;
     this.endPrice=50000000;
-  }
-
-  onPriceRangeChange(event: any): void {
-    const value = event.target.value;
-    const [min, max] = value.split('-').map((val: string) => parseInt(val, 10));
-    this.SetPriceRange(min, max); 
-  }
-
-  onAcreageRangeChange(event: any): void {
-    const value = event.target.value;
-    const [min, max] = value.split('-').map((val: string) => parseInt(val, 10));
-    this.SetAcreageRange(min, max); 
   }
 
   SetPriceRange(start: number, end: number) {
@@ -140,16 +122,10 @@ export class RoommateSearchComponent {
     this.endPrice = end;
   }
 
-  SetAllAcreage(){
-    this.startAcreage=0;
-    this.endAcreage=150;
-  }
-
   SetAcreageRange(start: number, end: number) {
     this.startAcreage = start;
     this.endAcreage = end;
   }
-
 
   CallPhoneNumber(phoneNumber: string) {
     window.open(`tel:${phoneNumber}`, '_self');
@@ -159,34 +135,6 @@ export class RoommateSearchComponent {
     window.open(`zalo://chat?to=${phoneNumber}`, '_self');
   }
 
-
-  cities: Location[] = [];
-  districts: District[] = [];
-  wards: Ward[] = [];
-  selectedCity: string = '';
-  selectedDistrict: string = '';
-  selectedWard: string = '';
-  cityName: string='';
-  districtName: string='';
-  wardName: string='';
-  region:string='';
-
-  ListPosts(): void {
-    let params = new HttpParams();
-    params = params.set('CategoryName','chung');
-    const queryParams = params.toString();
-    this.postService.Call_API_Search_Post(queryParams).subscribe(
-      (response: { results: Post[] }) => { 
-        this.infs = response.results;
-        console.log("Request Body: ", queryParams); 
-        console.log("All Response: ", this.infs); 
-      },
-      error => {
-        console.error('Error:', error); 
-      }
-    );
-  }
-  
   GetFullAddress(address: any): string {
     const { province, district, ward, detail } = address;
     return `${district} - ${province}`;
@@ -248,6 +196,35 @@ export class RoommateSearchComponent {
       } 
     }
   }
+
+  cities: Location[] = [];
+  districts: District[] = [];
+  wards: Ward[] = [];
+  selectedCity: string = '';
+  selectedDistrict: string = '';
+  selectedWard: string = '';
+  cityName: string='';
+  districtName: string='';
+  wardName: string='';
+  region:string='';
+
+  ListPosts(): void {
+    let params = new HttpParams();
+    params = params.set('CategoryName','chung');
+    const queryParams = params.toString();
+    this.postService.Call_API_Search_Post(params).subscribe(
+      (response: { results: Post[] }) => { 
+        this.infs = response.results;
+        console.log("Request Body: ", queryParams); 
+        console.log("All Response: ", this.infs); 
+      },
+      error => {
+        console.error('Error:', error); 
+      }
+    );
+  }
+  
+  
 
   ResetAddress(){
     this.selectedCity = '';

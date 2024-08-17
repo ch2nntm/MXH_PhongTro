@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiService } from './api.service';
-import { TokenStoreService } from './token-store.service';
+import { ApiService } from '../api/api.service';
+import { TokenStoreService } from '../token-store/token-store.service';
 
 @Injectable({
   providedIn: 'root'

@@ -17,11 +17,12 @@ import { NewListContentComponent } from './components/new-list-content/new-list-
 import { RegisterOwnerContentComponent } from './components/register-owner-content/register-owner-content.component';
 import { RoommateSearchDetailComponent } from './components/roommate-search-detail/roommate-search-detail.component';
 import { AppComponent } from './app.component';
-import { AuthGuardService } from './services/authguardservice.guard';
+import { AuthGuardService } from './services/authguard/authguardservice.guard';
 
 const routes: Routes = [
   { path: '', component: AppComponent},
-  { path: 'uiuser', component: UIUserComponent, children:[
+  { path: 'uiuser', component: UIUserComponent, 
+    data: { roles: ['admin','user'] },children:[
     { path: 'rent-room', component: RentRoomComponent, canActivate:[AuthGuardService]},
     { path: 'roommate-search', component: RoommateSearchComponent},
     { path: 'news', component: NewsComponent},
@@ -36,7 +37,7 @@ const routes: Routes = [
   ]},
   { path: 'detailroommate/:id', component: RoommateSearchDetailComponent },
   { path: 'uiadmin', component: UIAdminComponent, canActivate:[AuthGuardService]
-    , data: { roles: ['admin'] }, children:[
+    , data: { roles: ['admin','user'] }, children:[
     { path: 'user-list', component: UserListComponent },
     { path: 'post-manage', component: PostManagementComponent},
     { path: 'approve-application', component: ApproveLandlordApplicationComponent},
