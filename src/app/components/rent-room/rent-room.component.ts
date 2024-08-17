@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { map, max } from 'rxjs';
+import { forkJoin, map, max } from 'rxjs';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Post } from '../../models/post/post';
 import { PostsService } from '../../services/post/posts.service';
@@ -29,8 +29,7 @@ interface Ward {
   styleUrl: './rent-room.component.css'
 })
 export class RentRoomComponent {
-  infs: Post[] = [];
-  Array_Price = [
+  array_price = [
     { min: 0, max: 500000000, label: 'Tất cả giá thành'},
     { min: 0, max: 1000000, label: 'Dưới 1 triệu' },
     { min: 1000000, max: 2000000, label: '1 triệu - 2 triệu đồng' },
@@ -41,7 +40,7 @@ export class RentRoomComponent {
     { min: 10000000, max: 50000000, label: 'Từ 10 triệu trở lên' }
   ];
 
-  Array_Acreage = [
+  array_acreage = [
     { min: 0, max: 20, label: 'Dưới 20m2'},
     { min: 20, max: 30, label: 'Từ 20m2 - 30m2' },
     { min: 30, max: 50, label: 'Từ 30m2 - 50m2' },
@@ -50,151 +49,99 @@ export class RentRoomComponent {
     { min: 100, max: 1000, label: 'Từ 100m2 trở lên' }
   ];
 
-  Array_Category=[
+  array_type_home = [
     { value: 'Tất cả nhà đất'},
     { value: 'Phòng trọ, Nhà trọ'},
     { value: 'Nhà thuê nguyên căn'},
     { value: 'Căn hộ mini'},
   ]
 
-  startPrice=this.Array_Price[0].min;
-  endPrice=this.Array_Price[this.Array_Price.length-1].max;
-  startAcreage=this.Array_Acreage[0].min;
-  endAcreage=this.Array_Acreage[this.Array_Acreage.length-1].max;
-  selectedCategory: string = '';
-  searchCategory: string='Tất cả';
-  isClickSearch: boolean=false;
-  isClickBtnKind: boolean=false;
-  isClickBtnAddress: boolean=false;
-  isClickBtnAcreage: boolean=false;
-  isClickBtnPrice: boolean=false;
-  isClickBtnFilter: boolean=false;
-  activeItem: string | null = null;
+  infs: Post[] = [];
+  infs_room: Post[]=[];
+  infs_house: Post[]=[];
+  infs_mini: Post[]=[];
+  start_price=this.array_price[0].min;
+  end_price=this.array_price[this.array_price.length-1].max;
+  start_acreage=this.array_acreage[0].min;
+  end_acreage=this.array_acreage[this.array_acreage.length-1].max;
+  type_home: string="";
+  is_click_btn_address: boolean=false;
+  is_click_btn_typehome: boolean=false;
+  is_click_btn_acreage: boolean=false;
+  is_click_btn_price: boolean=false;
+  active_item: string | null = null;
+  cities: Location[] = [];
+  districts: District[] = [];
+  selected_city: string = '';
+  selected_district: string = '';
+  city_name: string='';
+  district_name: string='';
+  region:string='';
 
-  private apiUrl = 'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json';
-
-  constructor(private http: HttpClient, private postService: PostsService, private router: Router) {
-    this.ListPosts();
-    console.log("End: ",this.Array_Acreage[this.Array_Acreage.length-1].max);
+  constructor(private _http: HttpClient, private _postService: PostsService, 
+    private _router: Router) {
   }
 
+  content:any;
   ngOnInit(): void {
-    this.FetchCities();
-    this.ListPosts();
+    this.fetchCities();
+    this.showPost();
   }
 
-  ToggleArrow(item: string) {
-    if (this.activeItem === item) {
-      this.activeItem = null;
+  toggleArrow(item: string) {
+    if (this.active_item === item) {
+      this.active_item = null;
     } else {
-      this.activeItem = item;
+      this.active_item = item;
     }
-    this.isClickBtnKind = (this.activeItem === 'kind');
-    this.isClickBtnAddress = (this.activeItem === 'address');
-    this.isClickBtnAcreage = (this.activeItem === 'acreage');
-    this.isClickBtnPrice = (this.activeItem === 'price');
-  }
-  
-
-  UpdateTypeHome(event: Event) {
-    const inputElement = event.target as HTMLInputElement;
-    this.selectedCategory = inputElement.value;
+    this.is_click_btn_typehome = (this.active_item === 'type_home');
+    this.is_click_btn_address = (this.active_item === 'address');
+    this.is_click_btn_acreage = (this.active_item === 'acreage');
+    this.is_click_btn_price = (this.active_item === 'price');
   }
 
-  SearchCategory(event: Event){
-    this.searchCategory=this.selectedCategory;
-    this.isClickSearch = true;
+  resetAll(){
+    this.city_name='';
+    this.district_name='';
+    this.selected_city='';
+    this.selected_district='';
+    this.start_acreage=0;
+    this.end_acreage=this.array_acreage[this.array_acreage.length-1].max;
+    this.start_price=0;
+    this.end_price=this.array_price[this.array_price.length-1].max;
+    this.type_home='';
+    this.showPost();
   }
 
-  ResetAll(){
-    this.cityName='';
-    this.districtName='';
-    this.wardName='';
-    this.selectedCity='';
-    this.selectedDistrict='';
-    this.selectedWard='';
-    this.startAcreage=0;
-    this.endAcreage=this.Array_Acreage[this.Array_Acreage.length-1].max;
-    this.startPrice=0;
-    this.endPrice=this.Array_Price[this.Array_Price.length-1].max;
-    this.ListPosts();
+  setAllPrice(){
+    this.start_price=0;
+    this.end_price=50000000;
   }
 
-  ResetTypeHome(){
-    this.searchCategory='Tất cả';
+  setTypeHome(value: string){
+    this.type_home=value;
   }
 
-  SetAllPrice(){
-    this.startPrice=0;
-    this.endPrice=50000000;
+  setPriceRange(start: number, end: number) {
+    this.start_price = start;
+    this.end_price = end;
   }
 
-  onPriceRangeChange(event: any): void {
-    const value = event.target.value;
-    const [min, max] = value.split('-').map((val: string) => parseInt(val, 10));
-    this.SetPriceRange(min, max); 
+  setAcreageRange(start: number, end: number) {
+    this.start_acreage = start;
+    this.end_acreage = end;
   }
 
-  onAcreageRangeChange(event: any): void {
-    const value = event.target.value;
-    const [min, max] = value.split('-').map((val: string) => parseInt(val, 10));
-    this.SetAcreageRange(min, max); 
-  }
-
-  SetPriceRange(start: number, end: number) {
-    this.startPrice = start;
-    this.endPrice = end;
-  }
-
-  SetAllAcreage(){
-    this.startAcreage=0;
-    this.endAcreage=150;
-  }
-
-  SetAcreageRange(start: number, end: number) {
-    this.startAcreage = start;
-    this.endAcreage = end;
-  }
-
-
-  CallPhoneNumber(phoneNumber: string) {
+  callPhoneNumber(phoneNumber: string) {
     window.open(`tel:${phoneNumber}`, '_self');
   }
 
-  OpenZaloMessage(phoneNumber: string) {
+  openZaloMessage(phoneNumber: string) {
     window.open(`zalo://chat?to=${phoneNumber}`, '_self');
   }
 
-
-  cities: Location[] = [];
-  districts: District[] = [];
-  wards: Ward[] = [];
-  selectedCity: string = '';
-  selectedDistrict: string = '';
-  selectedWard: string = '';
-  cityName: string='';
-  districtName: string='';
-  wardName: string='';
-  region:string='';
-
-  ListPosts(): void {
-    let params = new HttpParams();
-    params = params.set('CategoryName','căn');
-    const queryParams = params.toString();
-    this.postService.Call_API_Search_Post(queryParams).subscribe(
-      (response: { results: Post[] }) => { 
-        this.infs = response.results;
-        console.log("Request Body: ", queryParams); 
-        console.log("All Response: ", this.infs); 
-      },
-      error => {
-        console.error('Error:', error); 
-      }
-    );
-  }
-  
-  GetFullAddress(address: any): string {
-    const { province, district, ward, detail } = address;
+  getFullAddress(address: any): string {
+    const { province, district} = address;
     return `${district} - ${province}`;
   }
 
@@ -203,64 +150,77 @@ export class RentRoomComponent {
     return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
   }
 
-  FetchCities(): void {
-    this.http.get<Location[]>(this.apiUrl).subscribe(data => {
+  fetchCities(): void {
+    this._http.get<Location[]>('public/data.json').subscribe(data => {
       this.cities = data;
     });
   }
 
-  OnCityChange(event: any): void {
-    this.selectedCity = event.target.value;
-    this.selectedDistrict = '';
-    this.selectedWard = '';
+  onCityChange(event: any): void {
+    this.fetchCities();
+    this.selected_city = event.target.value;
+    this.selected_district = '';
     this.districts = [];
-    if (this.selectedCity) {
-      const selectedCity = this.cities.find(city => city.Id === this.selectedCity);
-      this.cityName=selectedCity?.Name ?? '';
-      if (this.cityName.startsWith('Tỉnh ')) {
-        this.cityName =  this.cityName.replace('Tỉnh ', '');
-      } else if (this.cityName.startsWith('Thành phố ')) {
-        this.cityName = this.cityName.replace('Thành phố ', '');
+    if (this.selected_city) {
+      const selected_city = this.cities.find(city => city.Id === this.selected_city);
+      this.city_name=selected_city?.Name ?? '';
+      if (this.city_name.startsWith('Tỉnh ')) {
+        this.city_name =  this.city_name.replace('Tỉnh ', '');
+      } else if (this.city_name.startsWith('Thành phố ')) {
+        this.city_name = this.city_name.replace('Thành phố ', '');
       }
-      this.region=this.cityName;
-      this.cityName=this.removeVietnameseTones(this.cityName);
-      if (selectedCity) {
-        this.districts = selectedCity.Districts || [];
+      this.region=this.city_name;
+      this.city_name=this.removeVietnameseTones(this.city_name);
+      if (selected_city) {
+        this.districts = selected_city.Districts || [];
       }
     }
   }
 
-  OnDistrictChange(event: any): void {
-    this.selectedDistrict = event.target.value;
-    this.selectedWard = '';
-    this.wards = [];
-    if (this.selectedDistrict) {
-      const selectedCity = this.cities.find(city => city.Id === this.selectedCity);
-      if (selectedCity) {
-        const selectedDistrict = selectedCity.Districts?.find(district => district.Id === this.selectedDistrict);
-        this.districtName=selectedDistrict?.Name ?? '';
-        if (this.districtName.startsWith('Huyện ')) {
-          this.districtName =  this.districtName.replace('Huyện ', '');
-        } else if (this.districtName.startsWith('Thành phố ')) {
-          this.districtName = this.districtName.replace('Thành phố ', '');
-        } else if (this.districtName.startsWith('Thị xã ')) {
-          this.districtName = this.districtName.replace('Thị xã ', '');
+  onDistrictChange(event: any): void {
+    this.selected_district = event.target.value;
+    if (this.selected_district) {
+      const selected_city = this.cities.find(city => city.Id === this.selected_city);
+      if (selected_city) {
+        const selected_district = selected_city.Districts?.find(district => district.Id === this.selected_district);
+        this.district_name=selected_district?.Name ?? '';
+        if (this.district_name.startsWith('Huyện ')) {
+          this.district_name =  this.district_name.replace('Huyện ', '');
+        } else if (this.district_name.startsWith('Thành phố ')) {
+          this.district_name = this.district_name.replace('Thành phố ', '');
+        } else if (this.district_name.startsWith('Thị xã ')) {
+          this.district_name = this.district_name.replace('Thị xã ', '');
         }
-        this.region=this.districtName+' - '+this.region;
-        this.districtName=this.removeVietnameseTones(this.districtName);
-        if (selectedDistrict) {
-          this.wards = selectedDistrict.Wards || [];
-        }
+        this.region=this.district_name+' - '+this.region;
+        this.district_name=this.removeVietnameseTones(this.district_name);
       } 
     }
   }
 
-  ResetAddress(){
-    this.selectedCity = '';
-    this.selectedDistrict = '';
-    this.selectedWard = '';
-    this.districts=[];
-    this.wards=[];
+  listPosts(category: string, item: Post[]): void {
+    let params = new HttpParams();
+    params = params.set('CategoryName',category);
+    const queryParams = params.toString();
+    this._postService.Call_API_Search_Post(params).subscribe(
+      (response: { results: Post[] }) => { 
+        item.splice(0, item.length, ...response.results);
+        console.log("Response: ", item); 
+      },
+      error => {
+        console.error('Error:', error); 
+      }
+    );
+  }
+
+  showPost(){
+    const query1 = this.listPosts('trọ',this.infs_room);
+    const query2 = this.listPosts('mini',this.infs_mini);
+    const query3 = this.listPosts('nhà',this.infs_house);
+    setTimeout(() => {
+      this.infs = this.infs_house.concat(this.infs_mini).concat(this.infs_room);
+      console.log("Inf: ", this.infs);
+    }, 500);
+    console.log("Inf: ",this.infs);
   }
 
   removeVietnameseTones(str: string): string {
@@ -272,36 +232,41 @@ export class RentRoomComponent {
               .trim();
   }
 
-  cityNameMap: { [id: number]: string } = {};
-  SearchAll(){
+  searchAll(){
     let params = new HttpParams();
-    if (this.startAcreage != 0) {
-      params = params.set('ArceFrom', this.startAcreage.toString());
+    if (this.start_acreage != 0) {
+      params = params.set('ArceFrom', this.start_acreage.toString());
     }
     else{
         params = params.set('ArceFrom','0');
     }
-    if (this.endAcreage != 0) {
-        params = params.set('ArceTo', this.endAcreage.toString());
+    if (this.end_acreage != 0) {
+        params = params.set('ArceTo', this.end_acreage.toString());
     }
-    if (this.startPrice != 0) {
-        params = params.set('from', this.startPrice.toString());
+    if (this.start_price != 0) {
+        params = params.set('from', this.start_price.toString());
     }
     else{
         params = params.set('from','0');
     }
-    if (this.endPrice != 0) {
-        params = params.set('to', this.endPrice.toString());
+    if (this.end_price != 0) {
+        params = params.set('to', this.end_price.toString());
     }
-    if (this.districtName != '') {
-      params = params.set('Address', this.districtName);
+    if (this.district_name != '') {
+      params = params.set('Address', this.district_name);
     }
-    else if(this.cityName != '')
-      params = params.set('Address', this.removeVietnameseTones(this.cityName));
-    params = params.set('CategoryName','căn');
-
+    else if(this.city_name != '')
+      params = params.set('Address', this.removeVietnameseTones(this.city_name));
+    if(this.type_home=="Phòng trọ, Nhà trọ")
+      params = params.set('CategoryName','trọ');
+    else if(this.type_home=="Nhà thuê nguyên căn")
+      params = params.set('CategoryName','nhà');
+    else if(this.type_home=="Căn hộ mini")
+      params = params.set('CategoryName','mini');
+    else if(this.type_home=="Tất cả nhà đất")
+      return this.showPost();
     const queryParams = params.toString();
-    this.postService.Call_API_Search_Post(queryParams).subscribe(
+    this._postService.Call_API_Search_Post(queryParams).subscribe(
       (response: { results: Post[] }) => { 
         this.infs = response.results;
         console.log("Params: ",queryParams);
@@ -313,7 +278,7 @@ export class RentRoomComponent {
     );
   }
 
-  NavigateToDetail(itemId: any): void {
-    this.router.navigate(['/detailroommate', itemId]);
+  navigateToDetail(itemId: any): void {
+    this._router.navigate(['/detailroommate', itemId]);
   }
 }

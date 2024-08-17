@@ -374,7 +374,7 @@ a{
 .type .display-value{
     /* display: none; */
     background: #fff;
-    margin-left: -150px;
+    /* margin-left: -150px; */
     margin-top: 5px;
     padding-left: 0px;
     border-radius: 5px;

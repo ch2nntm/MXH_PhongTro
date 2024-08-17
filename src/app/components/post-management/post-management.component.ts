@@ -81,7 +81,8 @@ export class PostManagementComponent implements OnInit{
     this.manage_post.getPost().subscribe(
       response => {
         this.posts=response;
-        console.log(response);
+        // console.log(response);
+        console.log('Admin Data:', response);
         this.updateQuantities();
         if (statust === 'active') {
           this.posts = this.posts.filter(post => post.status === 'active');
@@ -92,6 +93,9 @@ export class PostManagementComponent implements OnInit{
       },
       error => {
         console.error('Error:', error);
+        if (error.status === 401) {
+          alert('Bạn không có quyền truy cập');
+        }
       }
     );
   }

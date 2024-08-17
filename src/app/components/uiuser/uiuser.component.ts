@@ -42,7 +42,7 @@ export class UIUserComponent implements OnInit{
   LogOut(): void {
     // this.name = ''; 
     this._auth.logout();
-    this._router.navigate(['/']); // Chuyển hướng đến trang đăng ký
+    // this._router.navigate(['/']); 
   }
 
   // ToggleArrowKind(item: string) {

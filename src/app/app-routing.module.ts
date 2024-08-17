@@ -21,9 +21,8 @@ import { AuthGuardService } from './services/authguard/authguardservice.guard';
 
 const routes: Routes = [
   { path: '', component: AppComponent},
-  { path: 'uiuser', component: UIUserComponent, 
-    data: { roles: ['admin','user'] },children:[
-    { path: 'rent-room', component: RentRoomComponent, canActivate:[AuthGuardService]},
+  { path: 'uiuser', component: UIUserComponent, canActivate:[AuthGuardService], children:[
+    { path: 'rent-room', component: RentRoomComponent},
     { path: 'roommate-search', component: RoommateSearchComponent},
     { path: 'news', component: NewsComponent},
     { path: 'homepage', component: HomepagemainComponent, canActivate:[AuthGuardService]},

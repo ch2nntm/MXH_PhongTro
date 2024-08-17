@@ -20,19 +20,19 @@
         <div class="header-contain">
             <div class="process_value search mt-4">
                 <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off">
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
                     <label class="btn btn-outline-primary" for="btnradio1">Cho thuê</label>
                     
-                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" checked>
+                    <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
                     <label class="btn btn-outline-primary" for="btnradio2">Tìm người ở ghép</label>
                 </div>
                 <div class="button">
                     <div class="reset">
-                        <button class="reset-children" (click)="ResetAll()">
+                        <button class="reset-children" (click)="resetAll()">
                             <img src="public/recycle.png"/>
                             <p>Đặt lại</p>
                         </button>
-                        <button class="reset-children" (click)="SearchAll()">
+                        <button class="reset-children" (click)="searchAll()">
                             <img src="public/search_white.png"/>
                             <p>Tìm kiếm</p>
                         </button>
@@ -40,26 +40,45 @@
                 </div>  
             </div>
             <div class="type">
+                <div class="item item-value">
+                    <div class="name">
+                        <a *ngIf="type_home==''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': active_item == 'type_home'}" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('type_home')">
+                            Loại nhà đất
+                        </a>
+                        <a *ngIf="type_home!=''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': active_item == 'type_home'}" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('type_home')">
+                            {{type_home}}
+                        </a>
+                    </div>
+                    <div *ngIf="is_click_btn_typehome && active_item === 'type_home'" class="display-value">
+                        <div class="all">
+                            <button *ngFor="let type of array_type_home" 
+                            (click)="setTypeHome(type.value)"
+                            [ngClass]="{'selected': type_home === type.value}">
+                                {{type.value}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <div class="item item-address">
                     <div class="name">
-                        <a *ngIf="cityName==''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle2': activeItem == 'address'}" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('address')">
+                        <a *ngIf="city_name==''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle2': active_item == 'address'}" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('address')">
                             Khu vực
                         </a>
-                        <a  *ngIf="cityName!=''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle2': activeItem == 'address'}" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('address')">
+                        <a  *ngIf="city_name!=''" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle2': active_item == 'address'}" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('address')">
                             {{ region}}
                         </a>
                     </div>
-                    <div *ngIf="isClickBtnAddress && activeItem === 'address'" class="display-address">
+                    <div *ngIf="is_click_btn_address && active_item === 'address'" class="display-address">
                         <div class="province">
                             <img src="public/right-arrow.png"/>
-                            <select [(ngModel)]="selectedCity" (change)="OnCityChange($event)">
+                            <select [(ngModel)]="selected_city" (change)="onCityChange($event)">
                                 <option value="" selected>Chọn tỉnh thành</option>
                                 <option *ngFor="let city of cities" [value]="city.Id">{{ city.Name }}</option>
                             </select>
                         </div>
                         <div class="district">
                             <img src="public/right-arrow.png"/>
-                            <select [(ngModel)]="selectedDistrict" (change)="OnDistrictChange($event)">
+                            <select [(ngModel)]="selected_district" (change)="onDistrictChange($event)">
                                 <option value="" selected>Chọn quận huyện</option>
                                 <option *ngFor="let district of districts" [value]="district.Id">{{ district.Name }}</option>
                               </select>
@@ -75,35 +94,35 @@
                 </div>
                 <div class="item item-value">
                     <div class="name">
-                        <a *ngIf="startAcreage==0 && endAcreage==Array_Acreage[Array_Acreage.length-1].max" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': activeItem == 'acreage'}" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('acreage')">
+                        <a *ngIf="start_acreage==0 && end_acreage==array_acreage[array_acreage.length-1].max" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': active_item == 'acreage'}" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('acreage')">
                             Diện tích
                         </a>
-                        <a *ngIf="(startAcreage!=0 && endAcreage!=Array_Acreage[Array_Acreage.length-1].max) || 
-                                (startAcreage==0 && endAcreage!=Array_Acreage[Array_Acreage.length-1].max) || 
-                                (startAcreage!=0 && endAcreage==Array_Acreage[Array_Acreage.length-1].max)" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': activeItem == 'acreage'}" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('acreage')">
-                            Từ {{startAcreage}}m<sup>2</sup> - {{endAcreage}}m<sup>2</sup>
+                        <a *ngIf="(start_acreage!=0 && end_acreage!=array_acreage[array_acreage.length-1].max) || 
+                                (start_acreage==0 && end_acreage!=array_acreage[array_acreage.length-1].max) || 
+                                (start_acreage!=0 && end_acreage==array_acreage[array_acreage.length-1].max)" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle3': active_item == 'acreage'}" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('acreage')">
+                            Từ {{start_acreage}}m<sup>2</sup> - {{end_acreage}}m<sup>2</sup>
                         </a>
                     </div>
-                    <div *ngIf="isClickBtnAcreage && activeItem === 'acreage'" class="display-value">
+                    <div *ngIf="is_click_btn_acreage && active_item === 'acreage'" class="display-value">
                         <div class="value">
                             <div class="start">
-                                <p>{{startAcreage}}</p>
+                                <p>{{start_acreage}}</p>
                             </div>
                             <div class="img">
                                 <img src="public/arrow-right.png"/>
                             </div>
                             <div class="end">
-                                <p>{{endAcreage}}</p>
+                                <p>{{end_acreage}}</p>
                             </div>
                         </div>
                         <mat-slider smin="0" max="150" step="5">
-                            <input matSliderStartThumb [(ngModel)]="startAcreage">
-                            <input matSliderEndThumb [(ngModel)]="endAcreage">
+                            <input matSliderStartThumb [(ngModel)]="start_acreage">
+                            <input matSliderEndThumb [(ngModel)]="end_acreage">
                             </mat-slider>
                         <div class="all">
-                            <button *ngFor="let acreage of Array_Acreage" 
-                            (click)="SetAcreageRange(acreage.min,acreage.max)"
-                            [ngClass]="{'selected': startAcreage === acreage.min && endAcreage === acreage.max}">
+                            <button *ngFor="let acreage of array_acreage" 
+                            (click)="setAcreageRange(acreage.min,acreage.max)"
+                            [ngClass]="{'selected': start_acreage === acreage.min && end_acreage === acreage.max}">
                                 {{acreage.label}}
                             </button>
                         </div>
@@ -111,37 +130,37 @@
                 </div>
                 <div class="item item-value">
                     <div class="name">
-                        <a *ngIf="startPrice==0 && endPrice==Array_Price[Array_Price.length-1].max" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle4': activeItem == 'price'}" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('price')">
+                        <a *ngIf="start_price==0 && end_price==array_price[array_price.length-1].max" class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle4': active_item == 'price'}" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('price')">
                            Mức giá
                         </a>
-                        <a *ngIf="(startPrice!=0 && endPrice!=Array_Price[Array_Price.length-1].max) || 
-                                (startPrice==0 && endPrice!=Array_Price[Array_Price.length-1].max) || 
-                                (startPrice!=0 && endPrice==Array_Price[Array_Price.length-1].max)"
-                            class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle4': activeItem == 'price'}" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false" (click)="ToggleArrow('price')">
-                            Từ {{startPrice}} - {{endPrice}}
+                        <a *ngIf="(start_price!=0 && end_price!=array_price[array_price.length-1].max) || 
+                                (start_price==0 && end_price!=array_price[array_price.length-1].max) || 
+                                (start_price!=0 && end_price==array_price[array_price.length-1].max)"
+                            class="btn dropdown-toggle custom-dropdown-toggle" [ngClass]="{'custom-dropdown-toggle4': active_item == 'price'}" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-expanded="false" (click)="toggleArrow('price')">
+                            Từ {{start_price}} - {{end_price}}
 
                         </a>
                     </div>
-                    <div *ngIf="isClickBtnPrice && activeItem === 'price'" class="display-value">
+                    <div *ngIf="is_click_btn_price && active_item === 'price'" class="display-value">
                         <div class="value">
                             <div class="start">
-                                <p>{{startPrice}}</p>
+                                <p>{{start_price}}</p>
                             </div>
                             <div class="img">
                                 <img src="public/arrow-right.png"/>
                             </div>
                             <div class="end">
-                                <p>{{endPrice}}</p>
+                                <p>{{end_price}}</p>
                             </div>
                         </div>
                         <mat-slider smin="0" max="50000000" step="200000">
-                            <input matSliderStartThumb [(ngModel)]="startPrice">
-                            <input matSliderEndThumb [(ngModel)]="endPrice">
+                            <input matSliderStartThumb [(ngModel)]="start_price">
+                            <input matSliderEndThumb [(ngModel)]="end_price">
                             </mat-slider>
                         <div class="all">
-                            <button *ngFor="let price of Array_Price" 
-                            (click)="SetPriceRange(price.min,price.max)"
-                            [ngClass]="{'selected': startPrice === price.min && endPrice === price.max}">
+                            <button *ngFor="let price of array_price" 
+                            (click)="setPriceRange(price.min,price.max)"
+                            [ngClass]="{'selected': start_price === price.min && end_price === price.max}">
                                 {{price.label}}
                             </button>
                         </div>
@@ -167,28 +186,28 @@
             <div class="standard">
                 <div class="price">
                     <p>Xem theo giá</p>
-                    <button (click)="SetAllPrice()">
+                    <button (click)="setAllPrice()">
                         <p>Tất cả giá thành</p>
                     </button>
-                    <button (click)="SetPriceRange(0, 1000000)">
+                    <button (click)="setPriceRange(0, 1000000)">
                         <p>Dưới 1 triệu</p>
                     </button>
-                    <button (click)="SetPriceRange(1000000, 2000000)">
+                    <button (click)="setPriceRange(1000000, 2000000)">
                         <p>1 triệu - 2 triệu đồng</p>
                     </button>
-                    <button (click)="SetPriceRange(2000000, 3000000)">
+                    <button (click)="setPriceRange(2000000, 3000000)">
                         <p>2 triệu - 3 triệu đồng</p>
                     </button>
-                    <button (click)="SetPriceRange(3000000, 5000000)">
+                    <button (click)="setPriceRange(3000000, 5000000)">
                         <p>3 triệu - 5 triệu đồng</p>
                     </button>
-                    <button (click)="SetPriceRange(5000000, 7000000)">
+                    <button (click)="setPriceRange(5000000, 7000000)">
                         <p>5 triệu - 7 triệu đồng</p>
                     </button>
-                    <button (click)="SetPriceRange(7000000, 10000000)">
+                    <button (click)="setPriceRange(7000000, 10000000)">
                         <p>7 triệu - 10 triệu đồng</p>
                     </button>
-                    <button (click)="SetPriceRange(10000000, 50000000)">
+                    <button (click)="setPriceRange(10000000, 50000000)">
                         <p>Từ 10 triệu trở lên</p>
                     </button>
                 </div>
@@ -259,7 +278,7 @@
         <div class="inf">
             <div class="filter">
                 <p>Cho thuê/</p>
-                <p>{{searchCategory}}</p>
+                <p>Tất cả</p>
             </div>
             <h1>Cho thuê nhà đất trên toàn quốc</h1>
             <div class="quatity">
@@ -275,7 +294,7 @@
                     <div class="detail">
                         <div class="row">
                             <div class="col-12 col-md-6 col-lg-12 mb-4" *ngFor="let inf of infs">
-                                <div class="item" (click)="NavigateToDetail(inf.id)">
+                                <div class="item" (click)="navigateToDetail(inf.id)">
                                     <div class="img">
                                         <!-- <div class="img-child">
                                             <img src="public/pic_rent1.png"/>
@@ -299,7 +318,7 @@
                                             <div class="intro-inf d-flex flex-wrap">
                                                 <p class="fee">{{inf.price}} / tháng</p>
                                                 <p class="acreage">{{inf.acreage}}m<sup>2</sup>  </p>
-                                                <p class="address">{{ GetFullAddress(inf.address) }}</p>
+                                                <p class="address">{{ getFullAddress(inf.address) }}</p>
                                             </div>
                                         </div>
                                         <div class="contact d-flex flex-wrap">
@@ -313,11 +332,11 @@
                                                 </div>
                                             </div>
                                             <div class="contact-profile d-flex flex-wrap">
-                                                <button class="phone" (click)="CallPhoneNumber('0948394832')">
+                                                <button class="phone" (click)="callPhoneNumber('0948394832')">
                                                     <img src="public/telephone.png"/>
                                                     <p>0948394832</p>
                                                 </button>
-                                                <button class="zalo" (click)="OpenZaloMessage('0948394832')">
+                                                <button class="zalo" (click)="openZaloMessage('0948394832')">
                                                     <img src="public/zalo-logo.png"/>
                                                     <p>Liên hệ Zalo</p>
                                                 </button>
@@ -340,28 +359,28 @@
                     <div class="standard">
                         <div class="price">
                             <p>Xem theo giá</p>
-                            <button (click)="SetAllPrice()">
+                            <button (click)="setAllPrice()">
                                 <p>Tất cả giá thành</p>
                             </button>
-                            <button (click)="SetPriceRange(0, 1000000)">
+                            <button (click)="setPriceRange(0, 1000000)">
                                 <p>Dưới 1 triệu</p>
                             </button>
-                            <button (click)="SetPriceRange(1000000, 2000000)">
+                            <button (click)="setPriceRange(1000000, 2000000)">
                                 <p>1 triệu - 2 triệu đồng</p>
                             </button>
-                            <button (click)="SetPriceRange(2000000, 3000000)">
+                            <button (click)="setPriceRange(2000000, 3000000)">
                                 <p>2 triệu - 3 triệu đồng</p>
                             </button>
-                            <button (click)="SetPriceRange(3000000, 5000000)">
+                            <button (click)="setPriceRange(3000000, 5000000)">
                                 <p>3 triệu - 5 triệu đồng</p>
                             </button>
-                            <button (click)="SetPriceRange(5000000, 7000000)">
+                            <button (click)="setPriceRange(5000000, 7000000)">
                                 <p>5 triệu - 7 triệu đồng</p>
                             </button>
-                            <button (click)="SetPriceRange(7000000, 10000000)">
+                            <button (click)="setPriceRange(7000000, 10000000)">
                                 <p>7 triệu - 10 triệu đồng</p>
                             </button>
-                            <button (click)="SetPriceRange(10000000, 50000000)">
+                            <button (click)="setPriceRange(10000000, 50000000)">
                                 <p>Từ 10 triệu trở lên</p>
                             </button>
                         </div>

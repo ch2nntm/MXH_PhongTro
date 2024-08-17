@@ -12,20 +12,28 @@ export class ManagePostService {
   constructor(private http: HttpClient, private token: TokenStoreService) { }
 
   getPost(): Observable<any>{
-    const token = this.token.getToken();
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    });
-     console.log(headers)
-    return this.http.get(this.apiUrl);
+    // const token = this.token.getToken();
+    // const headers = new HttpHeaders({
+    //   'Authorization': `Bearer ${token}`,
+    //   'Content-Type': 'application/json',
+    //   'Accept': 'application/json'
+    // });
+    //  console.log(headers)
+    // return this.http.get(this.apiUrl);
 
-    return this.http.get(`${this.apiUrl}` , {headers}).pipe(
-      map((res) => {
-        return res;
-      })
-    );
+    // return this.http.get(`${this.apiUrl}` , {headers}).pipe(
+    //   map((res) => {
+    //     return res;
+    //   })
+    // );
+    const token = sessionStorage.getItem('authToken'); // Lấy token từ sessionStorage
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Thêm token vào header
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(this.apiUrl, { headers });
   }
   getPost1(): Observable<any>{
     return this.http.get<any>(`${this.apiUrl}`);

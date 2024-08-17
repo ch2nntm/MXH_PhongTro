@@ -10,7 +10,7 @@ export class AccountUserService {
   private apiUrl='http://localhost:5000/api/my-content';
   constructor(private http: HttpClient, private token: TokenStoreService) { }
 
-  getPost(): Observable<any>{
+  get_Post(): Observable<any>{
     const token = this.token.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
@@ -19,12 +19,5 @@ export class AccountUserService {
     });
      console.log(headers)
     return this.http.get(this.apiUrl);
-
-    return this.http.get(`${this.apiUrl}` , {headers}).pipe(
-      map((res) => {
-        return res;
-      })
-    );
-    
   }
 }
