@@ -12,22 +12,18 @@
             <h1>Danh sách bài đăng</h1>
             <div class="search-box">
                 <input type="text" [(ngModel)]="searchId"/>
-                <button (click)="SearchID(searchId)">
+                <button (click)="searchID(searchId)">
                     <img src="public/search.png"/>
                 </button>                
             </div>
             <div class="name-kind">
                 <div class="kind">
-                    <p *ngFor="let item of items" [class.selected]="item === selectedItem" (click)="ItemStatus(item)">
-                        {{ item.label }}
-                    </p>
+                    <button (click)="filterStatusActive('active')">Hoạt động</button>
+                    <button (click)="filterStatusBan('ban')">Bị cấm</button>
                 </div>
                <div class="container">
                     <div class="">
                         <div *ngFor="let item of posts" class="seperate-child">
-                            <!-- <div class="checkbox">
-                                <input type="checkbox"/>
-                            </div> -->
                         <div class="card mb-3">
                             <div class="row g-0">
                                 <div class="col-md-4">
@@ -42,7 +38,7 @@
                                     <h3 class="card-title">{{ item.title }}</h3>
                                     <div class="card-text">
                                         <img src="public/placeholder.png"/>
-                                        <p>{{ GetFullAddress(item.address) }}</p>
+                                        <p>{{ getFullAddress(item.address) }}</p>
                                     </div>
                                     <div class="card-text ">
                                         <p>{{ item.price }}</p>
@@ -64,10 +60,10 @@
                                             </p>
                                         </div>
                                         <div class="text-child">
-                                            <button class="delete" *ngIf="item.status === 'active'" type="button" (click)="ChangeToBan(item.id)">
+                                            <button class="delete" *ngIf="item.status === 'active'" type="button" (click)="changeToBan(item.id)">
                                                 <i class="bi bi-ban"></i>
                                             </button>
-                                            <button class="delete" *ngIf="item.status !== 'active'" type="button" (click)="ChangeToActive(item.id)">
+                                            <button class="delete" *ngIf="item.status !== 'active'" type="button" (click)="changeToActive(item.id)">
                                                 <i class="bi bi-activity"></i>
                                             </button>
                                         </div>

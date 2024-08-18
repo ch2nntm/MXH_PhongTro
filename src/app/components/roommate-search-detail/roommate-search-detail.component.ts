@@ -35,32 +35,27 @@ export class RoommateSearchDetailComponent {
         "phone": '',
     }
   };
-  currentImageIndex = 0;
+  current_image_index = 0;
   like: boolean=false;
   no="public/heart_border_black.png";
   yes="public/heart_blue.png";
-  images =  [
-    // 'public/pic_rent1.png',
-    // 'public/pic_rent2.png',
-    // 'public/pic_rent3.png',
-    // 'public/pic_rent2.png'
-  ];
+  images =  [];
   img_main='';
 
   constructor(private route: ActivatedRoute, private _api_post: PostsService){}
-  ChangeImg() {
-    this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
-    this.img_main = this.images[this.currentImageIndex];
-  }
+  // changeImg() {
+  //   this.current_image_index = (this.current_image_index + 1) % this.images.length;
+  //   this.img_main = this.images[this.current_image_index];
+  // }
 
-  Share() {
-    const shareUrl = 'https://example.com'; 
-    window.open(shareUrl, '_blank'); 
-  }
+  // share() {
+  //   const shareUrl = 'https://example.com'; 
+  //   window.open(shareUrl, '_blank'); 
+  // }
 
-  IsLike(){
-    this.like=!this.like;
-  }
+  // IsLike(){
+  //   this.like=!this.like;
+  // }
 
   Break() {
     var textElement = document.getElementById("des");
@@ -71,34 +66,30 @@ export class RoommateSearchDetailComponent {
     }
   }
 
-  CallPhoneNumber(phoneNumber: string) {
+  callPhoneNumber(phoneNumber: string) {
     window.open(`tel:${phoneNumber}`, '_self');
   }
 
-  OpenZaloMessage(phoneNumber: string) {
+  openZaloMessage(phoneNumber: string) {
     window.open(`zalo://chat?to=${phoneNumber}`, '_self');
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    this.ShowItem(id);
+    this.showItem(id);
     this.Break();
   }
 
-  ShowItem(idItem: any){
+  showItem(idItem: any){
     this._api_post.DetailPost(idItem).subscribe(
     (response: any) => { 
       this.post = response.results;
       this.img_main=this.post.images[0];
       console.log("Main: ",this.img_main);
-      // console.log(this.post);
-        // this.images = this.post.images.split(',');
-        // console.log("Img: ", this.images);
-      // console.log("Img: ",this.post.images);
     });
   }
 
-  GetFullAddress(address: any): string {
+  getFullAddress(address: any): string {
     const { province, district, ward, detail } = address;
     return `${district} - ${province}`;
   }
@@ -108,21 +99,21 @@ export class RoommateSearchDetailComponent {
     return `${('0' + date.getDate()).slice(-2)}/${('0' + (date.getMonth() + 1)).slice(-2)}/${date.getFullYear()}`;
   }
 
-  ChangeImgLeft() {
+  changeImgLeft() {
     if(this.post.images.length>1){
-      if(this.currentImageIndex==0){
-        this.currentImageIndex=this.images.length;
+      if(this.current_image_index==0){
+        this.current_image_index=this.images.length;
       }
         
-      this.currentImageIndex = (this.currentImageIndex - 1) % this.images.length;
-      this.img_main = this.images[this.currentImageIndex];
+      this.current_image_index = (this.current_image_index - 1) % this.images.length;
+      this.img_main = this.images[this.current_image_index];
     }
   }
 
-  ChangeImgRight() {
+  changeImgRight() {
     if(this.post.images.length>1){
-      this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
-      this.img_main = this.images[this.currentImageIndex];
+      this.current_image_index = (this.current_image_index + 1) % this.images.length;
+      this.img_main = this.images[this.current_image_index];
     }
   }
 

@@ -14,49 +14,47 @@ import { TokenStoreService } from '../../services/token-store/token-store.servic
 })
 
 export class RegisterComponent implements OnInit{
-  isLoggedIn: boolean=false;
-  isEmail: boolean=false;
-  isPassword: boolean=false;
-  isPhone: boolean=false;
-  isAddress: boolean=false;
-  isName: boolean=false;
+  is_logged_in: boolean=false;
+  is_email: boolean=false;
+  is_password: boolean=false;
+  is_phone: boolean=false;
+  is_address: boolean=false;
+  is_name: boolean=false;
   email: string='';
   password: string='';
   phone: string='';
   address='';
   name: string='';
 
-  isEmailLogin=false;
-  isPasswordLogin=false;
+  is_email_login=false;
+  is_password_login=false;
   emaillogin='';
   passwordlogin='';
 
-  registerForm: FormGroup | undefined;
-
-  constructor(private fb: FormBuilder, private _auth: AuthserviceService,
+  constructor(private _auth: AuthserviceService,
      private _login: LoginService, private _api_post: PostsService,
       private _router: Router, private _token: TokenStoreService){}
 
-  OnFocusEmail(){
-    this.isEmail = true;
+  onFocusEmail(){
+    this.is_email = true;
   }
-  OnFocusEmailLogin(){
-    this.isEmailLogin = true;
+  onFocusEmailLogin(){
+    this.is_email_login = true;
   }
-  OnFocusPassword(){
-    this.isPassword = true;
+  onFocusPassword(){
+    this.is_password = true;
   }
-  OnFocusPasswordLogin(){
-    this.isPasswordLogin = true;
+  onFocusPasswordLogin(){
+    this.is_password_login = true;
   }
-  OnFocusPhone(){
-    this.isPhone = true;
+  onFocusPhone(){
+    this.is_phone = true;
   }
-  OnFocusAddress(){
-    this.isAddress = true;
+  onFocusAddress(){
+    this.is_address = true;
   }
-  OnFocusName(){
-    this.isName = true;
+  onFocusName(){
+    this.is_name = true;
   }
 
   ngAfterViewInit (): void {
@@ -73,19 +71,13 @@ export class RegisterComponent implements OnInit{
     });
   }
   
-  emailFormControl = new FormControl('', [Validators.required, Validators.email]);
-  phoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\d{10}$/)]);
-  addressFormControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
-  nameFormControl = new FormControl('', [Validators.required, Validators.minLength(10)]);
-  passwordFormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
-  emailLoginFormControl = new FormControl('', [Validators.required, Validators.email]);
-  passwordLoginFormControl = new FormControl('', [Validators.required, Validators.minLength(6)]);
-
-  hide = true; // Hide password
-
-  ToggleHide() {
-    this.hide = !this.hide;
-  }
+  email_form_control = new FormControl('', [Validators.required, Validators.email]);
+  phone_form_control = new FormControl('', [Validators.required, Validators.pattern(/^\d{10}$/)]);
+  address_form_control = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  name_form_control = new FormControl('', [Validators.required, Validators.minLength(10)]);
+  password_form_control = new FormControl('', [Validators.required, Validators.minLength(6)]);
+  email_login_form_control = new FormControl('', [Validators.required, Validators.email]);
+  password_login_form_control = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
   ngOnInit(): void {}
   user = {
@@ -97,49 +89,40 @@ export class RegisterComponent implements OnInit{
     roles: ''
   };
 
-  OnSubmit(): void {
+  onSubmitLogin(): void {
     if (this.emaillogin === '' || this.passwordlogin === '') {
-      alert('Vui lòng điền đầy đủ các trường');
+      alert('Please fill in all fields!');
     } else {
       this._auth.login({ email: this.emaillogin, password: this.passwordlogin })
         .subscribe(
           (actor) => {
             console.log("Actor: "+actor.roles);
-            let user={
-              roles : actor.roles,
-              name: actor.name,
-              email: actor.email,
-              phone: actor.phone,
-              address_user: actor.address_user,
-              password: actor.password,
-            }
-
-            if (actor.roles == 'user') {
-              this._router.navigate(['/uiuser'], { queryParams: { name: actor.name } }); // Điều hướng tới trang User
-              this.isLoggedIn=true;
+            if (actor.roles == 'user' || actor.roles == 'customer') {
+              this._router.navigate(['/uiuser'], { queryParams: { name: actor.name } }); 
+              this.is_logged_in=true;
             } else if (actor.roles == 'admin') {
               console.log("Token admin: "+this._token.getToken());
               this._router.navigate(['/uiadmin']); 
-              this.isLoggedIn=true;
+              this.is_logged_in=true;
             } else {
               alert(actor.user.role);
             }
           },
           (error) => {
-            console.error('Lỗi đăng nhập:', error);
-            alert('Đăng nhập thất bại. Vui lòng kiểm tra thông tin và thử lại.');
+            console.error('Login error:', error);
+            alert('Login failed. Please check your information and try again.');
           }
         );
       }
   }
   
-  
-  OnRegister(): void {
+  onSubmitRegister(): void {
     if (this.user.name!='' && this.user.email!='' && this.user.address_user!=''
         && this.user.password!='' && this.user.phone!='') {
       this._api_post.Register_User(this.user).subscribe(
         (response: any) => {
           alert('Register successful');
+          this._router.navigate(['/']);
         },
         (error: any) => {
           console.error('Register error', error);

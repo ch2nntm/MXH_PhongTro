@@ -7,15 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <title>Document</title>
-</head>
-<body>
     <div class="header">
         <div class="header-contain">
             <div class="process_value search mt-4">
@@ -145,77 +136,28 @@
     </div>
     <div class="body-content">
         <div class="filter">
-
-        <!-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Toggle right offcanvas</button> -->
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" aria-expanded="false" aria-label="Toggle navigation">
             <img src="public/list.png"/>
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
-            <!-- <h5 class="offcanvas-title" id="offcanvasRightLabel">Offcanvas right</h5> -->
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
             <div class="standard">
                 <div class="price">
                     <p>Xem theo giá</p>
-                    <button (click)="setAllPrice()">
-                        <p>Tất cả giá thành</p>
-                    </button>
-                    <button (click)="setPriceRange(0, 1000000)">
-                        <p>Dưới 1 triệu</p>
-                    </button>
-                    <button (click)="setPriceRange(1000000, 2000000)">
-                        <p>1 triệu - 2 triệu đồng</p>
-                    </button>
-                    <button (click)="setPriceRange(2000000, 3000000)">
-                        <p>2 triệu - 3 triệu đồng</p>
-                    </button>
-                    <button (click)="setPriceRange(3000000, 5000000)">
-                        <p>3 triệu - 5 triệu đồng</p>
-                    </button>
-                    <button (click)="setPriceRange(5000000, 7000000)">
-                        <p>5 triệu - 7 triệu đồng</p>
-                    </button>
-                    <button (click)="setPriceRange(7000000, 10000000)">
-                        <p>7 triệu - 10 triệu đồng</p>
-                    </button>
-                    <button (click)="setPriceRange(10000000, 50000000)">
-                        <p>Từ 10 triệu trở lên</p>
+                    <button *ngFor="let price of array_price" 
+                            (click)="searchPrice(price.min,price.max)">
+                        <p>{{price.label}}</p>
                     </button>
                 </div>
                 <div class="acreage">
                     <p>Xem theo diện tích</p>
-                    <button>
-                        <p>Dưới 20m2</p>
-                    </button>
-                    <button>
-                        <p>Từ 20m2 - 30m2</p>
-                    </button>
-                    <button>
-                        <p>Từ 30m2 - 50m2</p>
-                    </button>
-                    <button>
-                        <p>Từ 50m2 - 70m2</p>
-                    </button>
-                    <button>
-                        <p>Từ 70m2 - 90m2</p>
-                    </button>
-                    <button>
-                        <p>Trên 90m2</p>
-                    </button>
-                </div>
-                <div class="category">
-                    <p>Danh mục cho thuê</p>
-                    <button>
-                        <p>Phòng trọ. Nhà trọ</p>
-                    </button>
-                    <button>
-                        <p>Nhà nguyên căn</p>
-                    </button>
-                    <button>
-                        <p>Căn hộ mini</p>
+                    <button *ngFor="let acreage of array_acreage" 
+                            (click)="searchAcreage(acreage.min,acreage.max)">
+                        <p>{{acreage.label}}</p>
                     </button>
                 </div>
                 <div class="posts">
@@ -270,20 +212,21 @@
                             <div class="col-12 col-md-6 col-lg-12 mb-4" *ngFor="let inf of infs">
                                 <div class="item" (click)="navigateToDetail(inf.id)">
                                     <div class="img">
-                                        <!-- <div class="img-child">
-                                            <img src="public/pic_rent1.png"/>
-                                        </div>
-                                        <div class="img-child">
-                                            <img src="public/pic_rent2.png"/>
-                                            <img src="public/pic_rent3.png"/>
-                                        </div> -->
                                         <div class="img-child" *ngIf="inf.images.length > 0">
                                             <img [src]="inf.images[0]"/>
                                         </div>
                                         <div class="img-child" *ngIf="inf.images.length > 1">
-                                        <img *ngFor="let img of inf.images.slice(1)" [src]="img"/>
+                                            <img *ngFor="let img of inf.images.slice(1)" [src]="img"/>
                                         </div>
+                                        <!-- <div class="img-child">
+                                            <img src="public/Danang-1.png"/>
+                                        </div>
+                                        <div class="img-child">
+                                            <img src="public/social.png"/>
+                                            <img src="public/pic_rent3.png"/>
+                                        </div> -->
                                     </div>
+                                    
                                     <div class="content">
                                         <div class="intro">
                                             <h3>
@@ -320,7 +263,6 @@
                                                     </button>
                                                     <button class="like">
                                                         <i class="bi bi-suit-heart"></i>
-                                                        <!-- <i class="bi bi-suit-heart-fill" *ngIf="inf.islike==true" style="color: #55B3D9"></i> -->
                                                     </button>
                                                 </div>
                                             </div>
@@ -333,62 +275,16 @@
                     <div class="standard">
                         <div class="price">
                             <p>Xem theo giá</p>
-                            <button (click)="setAllPrice()">
-                                <p>Tất cả giá thành</p>
-                            </button>
-                            <button (click)="setPriceRange(0, 1000000)">
-                                <p>Dưới 1 triệu</p>
-                            </button>
-                            <button (click)="setPriceRange(1000000, 2000000)">
-                                <p>1 triệu - 2 triệu đồng</p>
-                            </button>
-                            <button (click)="setPriceRange(2000000, 3000000)">
-                                <p>2 triệu - 3 triệu đồng</p>
-                            </button>
-                            <button (click)="setPriceRange(3000000, 5000000)">
-                                <p>3 triệu - 5 triệu đồng</p>
-                            </button>
-                            <button (click)="setPriceRange(5000000, 7000000)">
-                                <p>5 triệu - 7 triệu đồng</p>
-                            </button>
-                            <button (click)="setPriceRange(7000000, 10000000)">
-                                <p>7 triệu - 10 triệu đồng</p>
-                            </button>
-                            <button (click)="setPriceRange(10000000, 50000000)">
-                                <p>Từ 10 triệu trở lên</p>
+                            <button *ngFor="let price of array_price" 
+                                    (click)="searchPrice(price.min,price.max)">
+                                <p>{{price.label}}</p>
                             </button>
                         </div>
                         <div class="acreage">
                             <p>Xem theo diện tích</p>
-                            <button>
-                                <p>Dưới 20m2</p>
-                            </button>
-                            <button>
-                                <p>Từ 20m2 - 30m2</p>
-                            </button>
-                            <button>
-                                <p>Từ 30m2 - 50m2</p>
-                            </button>
-                            <button>
-                                <p>Từ 50m2 - 70m2</p>
-                            </button>
-                            <button>
-                                <p>Từ 70m2 - 90m2</p>
-                            </button>
-                            <button>
-                                <p>Trên 90m2</p>
-                            </button>
-                        </div>
-                        <div class="category">
-                            <p>Danh mục cho thuê</p>
-                            <button>
-                                <p>Phòng trọ. Nhà trọ</p>
-                            </button>
-                            <button>
-                                <p>Nhà nguyên căn</p>
-                            </button>
-                            <button>
-                                <p>Căn hộ mini</p>
+                            <button *ngFor="let acreage of array_acreage" 
+                                    (click)="searchAcreage(acreage.min,acreage.max)">
+                                <p>{{acreage.label}}</p>
                             </button>
                         </div>
                         <div class="posts">

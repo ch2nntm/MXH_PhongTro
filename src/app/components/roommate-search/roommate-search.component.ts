@@ -37,6 +37,7 @@ export class RoommateSearchComponent {
   ];
 
   array_acreage = [
+    { min: 0, max: 1000, label: 'Tất cả diện tích'},
     { min: 0, max: 20, label: 'Dưới 20m2'},
     { min: 20, max: 30, label: 'Từ 20m2 - 30m2' },
     { min: 30, max: 50, label: 'Từ 30m2 - 50m2' },
@@ -73,12 +74,10 @@ export class RoommateSearchComponent {
     this._user.get_Post().subscribe({
       next: (response: { contents: Post[] }) => {
         console.log("Content: ", response.contents);
-        // Xử lý dữ liệu nhận được từ API ở đây
         this.content = response.contents;
       },
       error: (error) => {
         console.error("Error fetching posts:", error);
-        // Xử lý lỗi ở đây
       }
     });
   }
@@ -244,6 +243,56 @@ export class RoommateSearchComponent {
       params = params.set('Address', this.removeVietnameseTones(this.city_name));
     params = params.set('CategoryName','chung');
     
+    const queryParams = params.toString();
+    this._postService.Call_API_Search_Post(queryParams).subscribe(
+      (response: { results: Post[] }) => { 
+        this.infs = response.results;
+        console.log("Params: ",queryParams);
+        console.log("All Response: ",response);
+      },
+      error => {
+        console.error('Error:', error);
+      }
+    );
+  }
+
+  searchPrice(start: number, end: number){
+    let params = new HttpParams();
+    if (start != 0) {
+      params = params.set('from', start.toString());
+    }
+    else{
+        params = params.set('from','0');
+    }
+    if (end != 0) {
+        params = params.set('to', end.toString());
+    }
+    params = params.set('CategoryName','chung');
+    const queryParams = params.toString();
+    this._postService.Call_API_Search_Post(queryParams).subscribe(
+      (response: { results: Post[] }) => { 
+        this.infs = response.results;
+        console.log("Params: ",queryParams);
+        console.log("All Response: ",response);
+      },
+      error => {
+        console.error('Error:', error);
+      }
+    );
+  }
+
+  searchAcreage(start: number, end: number){
+    let params = new HttpParams();
+    if (start != 0) {
+      params = params.set('ArceFrom', start.toString());
+    }
+    else{
+        params = params.set('ArceFrom','0');
+    }
+    if (end != 0) {
+        params = params.set('ArceTo', end.toString());
+    }
+    params = params.set('CategoryName','chung');
     const queryParams = params.toString();
     this._postService.Call_API_Search_Post(queryParams).subscribe(
       (response: { results: Post[] }) => { 

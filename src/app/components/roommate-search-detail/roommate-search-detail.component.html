@@ -89,22 +89,20 @@
             <div class="row img">
                 <div class="col-12 main">
                     <img class="img-fluid" src={{img_main}}/>
-                    <button class="left" (click)="ChangeImgLeft()">
+                    <button class="left" (click)="changeImgLeft()">
                         <img src="public/left-arrow.png"/>
                     </button>
-                    <button (click)="ChangeImgRight()">
+                    <button (click)="changeImgRight()">
                         <img src="public/right-arrow.png"/>
                     </button>
                 </div>
             </div>
             <div class="mt-3 intro">
-                <!-- <h3>Cần 2 bạn nam ở ghép, đầy đủ nội  Chỉ hơn 1 triệu/tháng. Giải pháp tối ưu cho tài chính của bạn</h3> -->
                 <h3>{{post.title}}</h3>
             </div>
             <div class="mt-3 d-flex align-items-center address">
                 <img src="public/placeholder.png"/>
-                <!-- <p>Cầu Giấy, Hà Nội</p> -->
-                 <p>{{GetFullAddress(post.address)}}</p>
+                <p>{{getFullAddress(post.address)}}</p>
             </div>
             <div class="detail">
                 <div class="detail-content">
@@ -124,14 +122,6 @@
             </div>
             <div class="description">
                 <strong>Thông tin mô tả</strong>
-                <!-- <p id="des">Giảm sốc: 200.000Đ/ 2 tháng đầu tiên - khi ký 1 năm trong T6/2024.
-                    - Điện: 4k/kwh, nước: Free, phí DV: 50k/giường.- Free: Wifi, giữ xe, máy giặt.- Cửa sổ lớn thoáng mát, đảm bảo đón nắng, giường, nệm, máy lạnh,...
-                    - Có hệ thống máy giặt, giàn phơi cao cấp.
-                    - Có chỗ để xe an toàn, cửa cuốn 2 lớp.
-                    - Hệ thống khoá cửa vân tay, camera an ninh 24/24.
-                    - Giờ giấc tự do, không chung chủ.
-                    - Mới mẻ, sạch sẽ, sang xịn, không ẩm thấm. Chất lượng dịch vụ tiêu chuẩn.
-                </p> -->
                 <p id="des">{{post.description}}</p>
             </div>
             <div class="features">
@@ -172,17 +162,16 @@
                 <p>{{post.user.name}}</p>
             </div>
             <div class="button">
-                <button class="tel" (click)="CallPhoneNumber('{{post.user.phone}}')">
+                <button class="tel" (click)="callPhoneNumber('{{post.user.phone}}')">
                     <img src="public/telephone.png"/>
                     <p>{{post.user.phone}}</p>
                 </button>
-                <button class="zalo" (click)="OpenZaloMessage('{{post.user.phone}}')">
+                <button class="zalo" (click)="openZaloMessage('{{post.user.phone}}')">
                     <img src="public/zalo-logo.png"/>
                     <p>Chat qua Zalo</p>
                 </button>
             </div>
         </div>
     </div>
-
-</body>
+</body> 
 </html>

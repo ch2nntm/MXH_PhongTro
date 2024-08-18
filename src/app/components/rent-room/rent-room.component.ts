@@ -57,6 +57,7 @@ export class RentRoomComponent {
   ]
 
   infs: Post[] = [];
+  infs_all: Post[] = [];
   infs_room: Post[]=[];
   infs_house: Post[]=[];
   infs_mini: Post[]=[];
@@ -100,7 +101,7 @@ export class RentRoomComponent {
     this.is_click_btn_price = (this.active_item === 'price');
   }
 
-  resetAll(){
+  resetFilter(){
     this.city_name='';
     this.district_name='';
     this.selected_city='';
@@ -110,6 +111,10 @@ export class RentRoomComponent {
     this.start_price=0;
     this.end_price=this.array_price[this.array_price.length-1].max;
     this.type_home='';
+  }
+
+  resetAll(){
+    this.resetFilter();
     this.showPost();
   }
 
@@ -199,41 +204,6 @@ export class RentRoomComponent {
 
   listPosts(category: string, item: Post[]): void {
     let params = new HttpParams();
-    params = params.set('CategoryName',category);
-    const queryParams = params.toString();
-    this._postService.Call_API_Search_Post(params).subscribe(
-      (response: { results: Post[] }) => { 
-        item.splice(0, item.length, ...response.results);
-        console.log("Response: ", item); 
-      },
-      error => {
-        console.error('Error:', error); 
-      }
-    );
-  }
-
-  showPost(){
-    const query1 = this.listPosts('trọ',this.infs_room);
-    const query2 = this.listPosts('mini',this.infs_mini);
-    const query3 = this.listPosts('nhà',this.infs_house);
-    setTimeout(() => {
-      this.infs = this.infs_house.concat(this.infs_mini).concat(this.infs_room);
-      console.log("Inf: ", this.infs);
-    }, 500);
-    console.log("Inf: ",this.infs);
-  }
-
-  removeVietnameseTones(str: string): string {
-    return str.normalize('NFD')
-              .replace(/[\u0300-\u036f]/g, '')
-              .replace(/đ/g, 'd').replace(/Đ/g, 'D')
-              .replace(/[^a-zA-Z0-9 ]/g, '')
-              .replace(/\s+/g, ' ')
-              .trim();
-  }
-
-  searchAll(){
-    let params = new HttpParams();
     if (this.start_acreage != 0) {
       params = params.set('ArceFrom', this.start_acreage.toString());
     }
@@ -257,25 +227,109 @@ export class RentRoomComponent {
     }
     else if(this.city_name != '')
       params = params.set('Address', this.removeVietnameseTones(this.city_name));
-    if(this.type_home=="Phòng trọ, Nhà trọ")
-      params = params.set('CategoryName','trọ');
-    else if(this.type_home=="Nhà thuê nguyên căn")
-      params = params.set('CategoryName','nhà');
-    else if(this.type_home=="Căn hộ mini")
-      params = params.set('CategoryName','mini');
-    else if(this.type_home=="Tất cả nhà đất")
-      return this.showPost();
+    params = params.set('CategoryName',category);
     const queryParams = params.toString();
     this._postService.Call_API_Search_Post(queryParams).subscribe(
       (response: { results: Post[] }) => { 
-        this.infs = response.results;
-        console.log("Params: ",queryParams);
-        console.log("All Response: ",response);
+        item.splice(0, item.length, ...response.results);
       },
       error => {
-        console.error('Error:', error);
+        console.error('Error:', error); 
       }
     );
+  }
+
+  showPost(){
+    const query1 = this.listPosts('trọ',this.infs_room);
+    const query2 = this.listPosts('mini',this.infs_mini);
+    const query3 = this.listPosts('nhà',this.infs_house);
+    setTimeout(() => {
+      this.infs = this.infs_house.concat(this.infs_mini).concat(this.infs_room);
+      console.log("Inf: ", this.infs);
+    }, 500);
+  }
+
+  removeVietnameseTones(str: string): string {
+    return str.normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+              .replace(/[^a-zA-Z0-9 ]/g, '')
+              .replace(/\s+/g, ' ')
+              .trim();
+  }
+
+  // searchAll(){
+  //   let params = new HttpParams();
+  //   if (this.start_acreage != 0) {
+  //     params = params.set('ArceFrom', this.start_acreage.toString());
+  //   }
+  //   else{
+  //       params = params.set('ArceFrom','0');
+  //   }
+  //   if (this.end_acreage != 0) {
+  //       params = params.set('ArceTo', this.end_acreage.toString());
+  //   }
+  //   if (this.start_price != 0) {
+  //       params = params.set('from', this.start_price.toString());
+  //   }
+  //   else{
+  //       params = params.set('from','0');
+  //   }
+  //   if (this.end_price != 0) {
+  //       params = params.set('to', this.end_price.toString());
+  //   }
+  //   if (this.district_name != '') {
+  //     params = params.set('Address', this.district_name);
+  //   }
+  //   else if(this.city_name != '')
+  //     params = params.set('Address', this.removeVietnameseTones(this.city_name));
+  //   if(this.type_home=="Phòng trọ, Nhà trọ")
+  //     params = params.set('CategoryName','trọ');
+  //   else if(this.type_home=="Nhà thuê nguyên căn")
+  //     params = params.set('CategoryName','nhà');
+  //   else if(this.type_home=="Căn hộ mini")
+  //     params = params.set('CategoryName','mini');
+  //   else if(this.type_home=="Tất cả nhà đất")
+  //     return this.showPost();
+  //   const queryParams = params.toString();
+  //   this._postService.Call_API_Search_Post(queryParams).subscribe(
+  //     (response: { results: Post[] }) => { 
+  //       this.infs = response.results;
+  //       console.log("Params: ",queryParams);
+  //       console.log("All Response: ",response);
+  //     },
+  //     error => {
+  //       console.error('Error:', error);
+  //     }
+  //   );
+  // }
+
+
+  searchAll(){
+    let params = '';
+    if(this.type_home=="Phòng trọ, Nhà trọ")
+        params = 'trọ';
+    else if(this.type_home=="Nhà thuê nguyên căn")
+      params = 'nhà';
+    else if(this.type_home=="Căn hộ mini")
+      params = 'mini';
+    else if(this.type_home=="Tất cả nhà đất")
+      return this.showPost();
+    this.listPosts(params,this.infs);
+  }
+
+  searchPrice(start: number, end: number){
+    this.resetFilter();
+    this.start_price=start;
+    this.end_price=end;
+    this.searchAll();
+  }
+
+  searchAcreage(start: number, end: number){
+    this.resetFilter();
+    this.start_acreage=start;
+    this.end_acreage=end;
+    this.searchAll();
   }
 
   navigateToDetail(itemId: any): void {

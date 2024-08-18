@@ -6,7 +6,7 @@
     <title>Sign In/Up Form</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
-<body *ngIf="!isLoggedIn">
+<body *ngIf="!is_logged_in">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="logo container-fluid">
             <a class="navbar-brand" href="#">
@@ -32,10 +32,9 @@
                 </ul>
                 <div class="d-flex">
                     <button class="login signin">Đăng nhập</button>
-                    <!-- <button class="register" [ngClass]="{'signup': !isSign, 'nosign': isSign}" id="signUp">Đăng ký</button> -->
                     <button class="upload">Đăng tin</button>
                 </div>
-        </div>
+            </div>
         </div>
     </nav>
         <img class="pic1" src="public/background-register1.png"/>
@@ -45,7 +44,7 @@
     <div class="content">
         <div class="container" id="container">
             <div class="form-container sign-up-container">
-                <form (ngSubmit)="OnRegister()" #registerForm="ngForm">
+                <form (ngSubmit)="onSubmitRegister()" #registerForm="ngForm">
                     <h1>Tạo Tài Khoản</h1>
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -53,57 +52,53 @@
                         <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                     <span>hoặc sử dụng email của bạn để đăng ký</span>
-                        <!-- <input type="text" placeholder="Họ tên" required/> -->
                         <div class="item">
-                            <label for="name" [ngClass]="{ 'empty': name === '', 'isname': isName}">Họ tên</label>
-                            <input id="name" type="text" (focus)="OnFocusName()" [formControl]="nameFormControl" [(ngModel)]="user.name" required />
-                            <mat-error style="font-size: 12px;" *ngIf="nameFormControl.hasError('required')  && (nameFormControl.dirty || nameFormControl.touched)">
+                            <label for="name" [ngClass]="{ 'empty': name === '', 'isname': is_name}">Họ tên</label>
+                            <input id="name" type="text" (focus)="onFocusName()" [formControl]="name_form_control" [(ngModel)]="user.name" required />
+                            <mat-error style="font-size: 12px;" *ngIf="name_form_control.hasError('required')  && (name_form_control.dirty || name_form_control.touched)">
                                 Name is <strong>required</strong>
                             </mat-error>
-                            <mat-error style="font-size: 12px" *ngIf="nameFormControl.hasError('minlength')">
+                            <mat-error style="font-size: 12px" *ngIf="name_form_control.hasError('minlength')">
                                 Name must be at least 10 characters
                             </mat-error>
                         </div>
                         <div class="item">
-                            <label for="email" [ngClass]="{ 'empty': email==='','isemail': isEmail}">Email</label>
-                            <input id="email" type="email" (focus)="OnFocusEmail()" [formControl]="emailFormControl" [(ngModel)]="user.email" required />
-                            <mat-error style="font-size: 12px" *ngIf="emailFormControl.hasError('required')  && (emailFormControl.dirty || emailFormControl.touched)">
+                            <label for="email" [ngClass]="{ 'empty': email==='','isemail': is_email}">Email</label>
+                            <input id="email" type="email" (focus)="onFocusEmail()" [formControl]="email_form_control" [(ngModel)]="user.email" required />
+                            <mat-error style="font-size: 12px" *ngIf="email_form_control.hasError('required')  && (email_form_control.dirty || email_form_control.touched)">
                                 Email is <strong>required</strong>
                             </mat-error>
-                            <mat-error style="font-size: 12px" *ngIf="emailFormControl.hasError('email')">
+                            <mat-error style="font-size: 12px" *ngIf="email_form_control.hasError('email')">
                                 Please enter a valid email address
                             </mat-error>
                         </div>
-                        <!-- <input type="tel" placeholder="Số điện thoại" required/> -->
                         <div class="item">
-                            <label for="phone" [ngClass]="{ 'empty': phone === '', 'isphone': isPhone}">Số điện thoại</label>
-                            <input id="phone" type="tel" (focus)="OnFocusPhone()" [formControl]="phoneFormControl" [(ngModel)]="user.phone" required />
-                            <mat-error style="font-size: 12px" *ngIf="phoneFormControl.hasError('required')  && (phoneFormControl.dirty || phoneFormControl.touched)">
+                            <label for="phone" [ngClass]="{ 'empty': phone === '', 'isphone': is_phone}">Số điện thoại</label>
+                            <input id="phone" type="tel" (focus)="onFocusPhone()" [formControl]="phone_form_control" [(ngModel)]="user.phone" required />
+                            <mat-error style="font-size: 12px" *ngIf="phone_form_control.hasError('required')  && (phone_form_control.dirty || phone_form_control.touched)">
                                 Phone is <strong>required</strong>
                             </mat-error>
-                            <mat-error style="font-size: 12px" *ngIf="phoneFormControl.hasError('pattern')">
+                            <mat-error style="font-size: 12px" *ngIf="phone_form_control.hasError('pattern')">
                                 Please enter a valid phone
                             </mat-error>
                         </div>
-                        <!-- <input type="text" placeholder="Địa chỉ" required/> -->
                         <div class="item">
-                            <label for="address" [ngClass]="{ 'empty': address === '', 'isaddress': isAddress}">Địa chỉ</label>
-                            <input id="address" type="text" (focus)="OnFocusAddress()" [formControl]="addressFormControl" [(ngModel)]="user.address_user" required />
-                            <mat-error style="font-size: 12px" *ngIf="addressFormControl.hasError('required')  && (addressFormControl.dirty || addressFormControl.touched)">
+                            <label for="address" [ngClass]="{ 'empty': address === '', 'isaddress': is_address}">Địa chỉ</label>
+                            <input id="address" type="text" (focus)="onFocusAddress()" [formControl]="address_form_control" [(ngModel)]="user.address_user" required />
+                            <mat-error style="font-size: 12px" *ngIf="address_form_control.hasError('required')  && (address_form_control.dirty || address_form_control.touched)">
                                 Address is <strong>required</strong>
                             </mat-error>
-                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="addressFormControl.hasError('minlength')">
+                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="address_form_control.hasError('minlength')">
                                 Address must be at least 5 characters
                             </mat-error>
                         </div>
-                        <!-- <input type="password" placeholder="Mật khẩu" required/> -->
                         <div class="item">
-                            <label for="password" [ngClass]="{ 'empty': password === '', 'ispassword': isPassword}">Mật khẩu</label>
-                            <input id="password" type="password" (focus)="OnFocusPassword()" [formControl]="passwordFormControl" [(ngModel)]="user.password" required />
-                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="passwordFormControl.hasError('required')  && (passwordFormControl.dirty || passwordFormControl.touched)">
+                            <label for="password" [ngClass]="{ 'empty': password === '', 'ispassword': is_password}">Mật khẩu</label>
+                            <input id="password" type="password" (focus)="onFocusPassword()" [formControl]="password_form_control" [(ngModel)]="user.password" required />
+                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="password_form_control.hasError('required')  && (password_form_control.dirty || password_form_control.touched)">
                                 Password is <strong>required</strong>
                             </mat-error>
-                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="passwordFormControl.hasError('minlength')">
+                            <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="password_form_control.hasError('minlength')">
                                 Password must be at least 6 characters
                             </mat-error>
                         </div>
@@ -111,7 +106,7 @@
                 </form>
             </div>
             <div class="form-container sign-in-container">
-                <form (ngSubmit)="OnSubmit()" #loginForm="ngForm">
+                <form (ngSubmit)="onSubmitLogin()" #loginForm="ngForm">
                     <h1>Đăng Nhập</h1>
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -121,22 +116,22 @@
                     <span>hoặc sử dụng email của bạn để đăng ký</span>
                 <div class="form">
                     <div class="item">
-                        <label for="email" [ngClass]="{ 'empty': email==='','isemail': isEmailLogin}">Email</label>
-                        <input id="email" type="email" name="email" (focus)="OnFocusEmailLogin()" [formControl]="emailLoginFormControl" [(ngModel)]="emaillogin" required />
-                        <mat-error style="font-size: 12px" *ngIf="emailLoginFormControl.hasError('required')  && (emailLoginFormControl.dirty || emailLoginFormControl.touched)">
+                        <label for="email" [ngClass]="{ 'empty': email==='','isemail': is_email_login}">Email</label>
+                        <input id="email" type="email" name="email" (focus)="onFocusEmailLogin()" [formControl]="email_login_form_control" [(ngModel)]="emaillogin" required />
+                        <mat-error style="font-size: 12px" *ngIf="email_login_form_control.hasError('required')  && (email_login_form_control.dirty || email_login_form_control.touched)">
                             Email is <strong>required</strong>
                         </mat-error>
-                        <mat-error style="font-size: 12px" *ngIf="emailLoginFormControl.hasError('email')">
+                        <mat-error style="font-size: 12px" *ngIf="email_login_form_control.hasError('email')">
                             Please enter a valid email address
                         </mat-error>
                     </div>
                     <div class="item">
-                        <label for="password" [ngClass]="{ 'empty': password === '', 'ispassword': isPasswordLogin}">Mật khẩu</label>
-                        <input id="password" type="password" name="password" (focus)="OnFocusPasswordLogin()" [formControl]="passwordLoginFormControl" [(ngModel)]="passwordlogin" required />
-                        <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="passwordLoginFormControl.hasError('required')  && (passwordLoginFormControl.dirty || passwordLoginFormControl.touched)">
+                        <label for="password" [ngClass]="{ 'empty': password === '', 'ispassword': is_password_login}">Mật khẩu</label>
+                        <input id="password" type="password" name="password" (focus)="onFocusPasswordLogin()" [formControl]="password_login_form_control" [(ngModel)]="passwordlogin" required />
+                        <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="password_login_form_control.hasError('required')  && (password_login_form_control.dirty || password_login_form_control.touched)">
                             Password is <strong>required</strong>
                         </mat-error>
-                        <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="passwordLoginFormControl.hasError('minlength')">
+                        <mat-error style="font-size: 12px; margin-top: -13px;" *ngIf="password_login_form_control.hasError('minlength')">
                             Password must be at least 6 characters
                         </mat-error>
                     </div>
