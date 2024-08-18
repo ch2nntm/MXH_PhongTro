@@ -18,9 +18,11 @@ import { RegisterOwnerContentComponent } from './components/register-owner-conte
 import { RoommateSearchDetailComponent } from './components/roommate-search-detail/roommate-search-detail.component';
 import { AppComponent } from './app.component';
 import { AuthGuardService } from './services/authguard/authguardservice.guard';
+import { register } from 'node:module';
+import { RegisterComponent } from './components/register/register.component';
 
 const routes: Routes = [
-  { path: '', component: AppComponent},
+  { path: '', component: RegisterComponent},
   { path: 'uiuser', component: UIUserComponent, canActivate:[AuthGuardService], children:[
     { path: 'rent-room', component: RentRoomComponent},
     { path: 'roommate-search', component: RoommateSearchComponent},
@@ -36,7 +38,7 @@ const routes: Routes = [
   ]},
   { path: 'detailroommate/:id', component: RoommateSearchDetailComponent },
   { path: 'uiadmin', component: UIAdminComponent, canActivate:[AuthGuardService]
-    , data: { roles: ['admin','user'] }, children:[
+    , children:[
     { path: 'user-list', component: UserListComponent },
     { path: 'post-manage', component: PostManagementComponent},
     { path: 'approve-application', component: ApproveLandlordApplicationComponent},
