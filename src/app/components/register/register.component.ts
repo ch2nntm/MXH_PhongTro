@@ -79,7 +79,10 @@ export class RegisterComponent implements OnInit{
   email_login_form_control = new FormControl('', [Validators.required, Validators.email]);
   password_login_form_control = new FormControl('', [Validators.required, Validators.minLength(6)]);
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this._auth.logout();
+    console.log("Token Login: ",this._token.getToken());
+  }
   user = {
     name: '',
     email: '',
@@ -93,7 +96,7 @@ export class RegisterComponent implements OnInit{
     if (this.emaillogin === '' || this.passwordlogin === '') {
       alert('Please fill in all fields!');
     } else {
-      this._auth.login({ email: this.emaillogin, password: this.passwordlogin })
+      this._auth.Call_API_LoginUser({ email: this.emaillogin, password: this.passwordlogin })
         .subscribe(
           (actor) => {
             console.log("Actor: "+actor.roles);
@@ -119,10 +122,10 @@ export class RegisterComponent implements OnInit{
   onSubmitRegister(): void {
     if (this.user.name!='' && this.user.email!='' && this.user.address_user!=''
         && this.user.password!='' && this.user.phone!='') {
-      this._api_post.Register_User(this.user).subscribe(
+      this._auth.Call_API_RegisterUser(this.user).subscribe(
         (response: any) => {
           alert('Register successful');
-          this._router.navigate(['/']);
+          this._router.navigate(['uiuser/regiter']);
         },
         (error: any) => {
           console.error('Register error', error);

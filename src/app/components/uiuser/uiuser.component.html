@@ -24,7 +24,7 @@
                     </li>
                 </ul>
                 <div class="d-flex">
-                    <div class="me-3 icon">
+                    <div class="me-3 icon" *ngIf="is_login">
                         <div class="item">
                             <i class="bi bi-heart"></i>
                             <span class="badge bg-danger">4</span>
@@ -36,41 +36,41 @@
                         <div class="name">
                             <img src="public/Avatar.png"/>
                             <p class="">{{name}}</p>
-                                <div class="display">
-                                    <div class="register">
-                                        <h3>Đăng kí làm người cho thuê</h3>
-                                        <div class="register-inf">
-                                            <div class="inf">
-                                                <p>Để được đăng tin cho thuê bất động sản</p>
-                                                <button class="btn btn-primary">Đăng kí ngay</button>
-                                            </div>
-                                            <img src="public/house.png"/>
+                            <div class="display">
+                                <div class="register">
+                                    <h3>Đăng kí làm người cho thuê</h3>
+                                    <div class="register-inf">
+                                        <div class="inf">
+                                            <p>Để được đăng tin cho thuê bất động sản</p>
+                                            <button class="btn btn-primary">Đăng kí ngay</button>
                                         </div>
+                                        <img src="public/house.png"/>
                                     </div>
-                                    <button class="inf-group">
-                                        <img src="public/list_register.png"/>
-                                        <a class="nav-link" routerLink="edituser" routerLinkActive="active-link">Quản lý tin đăng</a>
-                                    </button>
-                                    <button class="inf-group">
-                                        <img src="public/inf_register.png"/>
-                                        <p>Thay đổi thông tin cá nhân</p>
-                                    </button>
-                                    <button class="inf-group">
-                                        <img src="public/password_register.png"/>
-                                        <p>Thay đổi mật khẩu</p>
-                                    </button>
-                                    <button class="btn btn-primary logout" (click)="logOut()">
-                                        <p>Đăng xuất</p>
-                                        <img src="public/logout.png"/>
-                                    </button>
                                 </div>
+                                <button class="inf-group">
+                                    <img src="public/list_register.png"/>
+                                    <a class="nav-link" routerLink="edituser" routerLinkActive="active-link">Quản lý tin đăng</a>
+                                </button>
+                                <button class="inf-group">
+                                    <img src="public/inf_register.png"/>
+                                    <p>Thay đổi thông tin cá nhân</p>
+                                </button>
+                                <button class="inf-group">
+                                    <img src="public/password_register.png"/>
+                                    <p>Thay đổi mật khẩu</p>
+                                </button>
+                                <button class="btn btn-primary logout" (click)="logOut()">
+                                    <p>Đăng xuất</p>
+                                    <img src="public/logout.png"/>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     <div class="account d-flex align-items-center">
-                        <button class="btn btn-primary">Đăng tin</button>
+                        <button class="btn btn-primary" (click)="upPost()">Đăng tin</button>
                     </div>
                 </div>
-        </div>
+            </div>
         </div>
     </nav> 
   </div>

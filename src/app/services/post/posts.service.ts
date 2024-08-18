@@ -17,22 +17,12 @@ export class PostsService {
     this.user = this.userSubject.asObservable();
   }
   public url = this._api;
-  ListPost(requestBody: any): Observable<any> {
-    return this._api.postTypeRequestContent('home', requestBody);
-  }
-  
-  SearchPost(params: any): Observable<any> {
-    return this._api.postTypeRequestContent('home', params).pipe(
-      map(response => response || throwError('Không tìm thấy kết quả phù hợp')),
-      catchError(error => {
-        console.error('Error in SearchPost:', error);
-        return throwError(error);
-      })
-    );
+  Call_API_ListPost(requestBody: any): Observable<any> {
+    return this._api.API_Basic_PostTypeRequest('home', requestBody);
   }
 
   Call_API_Search_Post(params: any): Observable<any>{
-    return this._api.postTypeRequestContent('home?'+params,params).pipe(
+    return this._api.API_Basic_PostTypeRequest('home?'+params,params).pipe(
       map(response => response || throwError('Không tìm thấy kết quả phù hợp')),
       catchError(error => {
         console.error('Error in SearchPost:', error);
@@ -43,7 +33,7 @@ export class PostsService {
 
   
   Call_API_Admin_Management(params: any): Observable<any>{
-    return this._api.getTypeRequest('admin/management-user').pipe(
+    return this._api.API_Basic_GetTypeRequest('admin/management-user').pipe(
       map(response => response || throwError('Không tìm thấy kết quả phù hợp')),
       catchError(error => {
         console.error('Error in SearchPost:', error);
@@ -52,12 +42,8 @@ export class PostsService {
     );
   }
 
-  Register_User(requestBody: any): Observable<any> {
-    return this._api.postTypeRequestContent('register', requestBody);
-  }
-
   DetailPost(param: any){
-    return this._api.getTypeRequest(`home/${param}`);
+    return this._api.API_Basic_GetTypeRequest(`home/${param}`);
   }
 
 }

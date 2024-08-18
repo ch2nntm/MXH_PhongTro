@@ -24,32 +24,24 @@ export class AuthserviceService {
     return this.userSubject.value;
   }
 
-  login(credentials: any): Observable<any> {
-    return this._api.postTypeRequest('login', {
-      email: credentials.email,
-      password: credentials.password
+  Call_API_LoginUser(credential: any): Observable<any> {
+    return this._api.API_Basic_PostTypeRequest('login', {
+      email: credential.email,
+      password: credential.password
     }).pipe(
       map((response: any) => {
-        // let user={
-        //   email: credentials.email,
-        //   token: response.token,
-        //   role: response.role
-        // };
-        // this._token.setToken(response.token);
-        // this._token.setUser(response.data[0]);
-        // this.userSubject.next(user);
-        // return user;
         if (response && response.token && response.user) {
+          console.log('Token:', response.token);
           const actor = response.user;
-          // if (actor.roles === 'user' || actor.roles === 'admin') {
+          if (actor.roles === 'user' || actor.roles === 'admin') {
             this._token.setToken(response.token);
-            // sessionStorage.setItem(this.tokenKey, response.token);
+            console.log('Token stored:', this._token.getToken());
             this._token.setUser(actor);
             this.userSubject.next(actor);
             return actor;
-        //  } else {
-        //     throw new Error('Vai trò người dùng không hợp lệ');
-        //   }
+          } else {
+            throw new Error('Vai trò người dùng không hợp lệ');
+          }
         } else {
           throw new Error('Thông tin đăng nhập không hợp lệ');
         }
@@ -57,12 +49,8 @@ export class AuthserviceService {
     );
   }
 
-  register(user: any): Observable<any> {
-    return this._api.postTypeRequest('register', {
-      fullName: user.fullName,
-      email: user.email,
-      password: user.password,
-    });
+  Call_API_RegisterUser(requestBody: any): Observable<any> {
+    return this._api.API_Basic_PostTypeRequest('register', requestBody);
   }
 
   logout() {

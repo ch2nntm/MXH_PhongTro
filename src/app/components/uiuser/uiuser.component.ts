@@ -13,6 +13,7 @@ import { AuthserviceService } from '../../services/auth/authservice.service';
 export class UIUserComponent implements OnInit{
   title = 'VD_material';
   name: string='';
+  is_login: boolean=false;
 
   constructor(private _route: ActivatedRoute, private _router:Router,
     private _login: LoginService, private _token: TokenStoreService,
@@ -24,11 +25,20 @@ export class UIUserComponent implements OnInit{
       namefull = params['name'];
     });
     this.name = namefull;
+    console.log("Token ne:",this._token.getToken());
+    if(this._token.getToken()){
+      this.is_login=true;
+    }
+  }
+
+  upPost(){
+    if(this.is_login==false)
+      this._router.navigate(['register/']); 
   }
 
   logOut(): void {
     this._auth.logout();
-    this._router.navigate(['/']); 
+    this._router.navigate(['register/']); 
   }
 
 }

@@ -381,7 +381,7 @@ a{
 .type .display-value{
     /* display: none; */
     background: #fff;
-    margin-left: 0px;
+    margin-left: -150px;
     margin-top: 5px;
     padding-left: 0px;
     border-radius: 5px;
@@ -658,7 +658,7 @@ flex-shrink: 0;
 }
 
 
-.inf .body .detail .item{
+ .item{
     width: 100%;
     border-radius: 5px;
     margin-top: 10px;
@@ -667,7 +667,7 @@ flex-shrink: 0;
     padding-bottom: 20px;
 }
 
-.inf .body .detail .item .img{
+ .item .img{
     display: flex;
     flex-direction: row;
     height: 45vh;
@@ -675,95 +675,91 @@ flex-shrink: 0;
     outline: none;
 }
 
-.inf .body .detail .item .img img{
+ .item .img img{
     width: 100%;
     border: none;
     outline: none;
-    box-shadow: none;
     height: 20vh;
     overflow: hidden;
 }
 
-.inf .body .detail .item .img .img-child:first-child{
+ .item .img .img-child:first-child{
     width: 500px;
 }
 
-.inf .body .detail .item .img .img-child:last-child{
-    /* width: 500px; */
-    border: none;
-    outline: none;
+ .item .img .img-child:last-child{
+    /* width: 350px; */
 }
 
-.inf .body .detail .item .img .img-child:first-child img{
+ .item .img .img-child:first-child img{
     /* width: 500px; */
     object-fit: cover;
     /* width: 100%; */
     height: 42vh;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
+    border: none;
+    outline: none;
 }
 
-.inf .body .detail .item .img .img-child:last-child{
+ .item .img .img-child:last-child{
     margin-left: 10px;
     border: none;
     outline: none;
 }
 
-.inf .body .detail .item .img .img-child:last-child img:last-child{
+ .item .img .img-child:last-child img:last-child{
     margin-top: 10px;
     border: none;
     outline: none;
 }
 
-.inf .body .detail .item .content{
+ .item .content{
     margin-left: 5%;
     margin-right: 5%;
 }
 
-.inf .body .detail .item .content .intro .intro-inf{
+ .item .content .intro .intro-inf{
     display: flex;
     gap: 30px;
     row-gap: 0;
 }
 
-.inf .body .detail .item .content .intro .intro-inf .fee,
-.inf .body .detail .item .content .intro .intro-inf .acreage{
+ .item .content .intro .intro-inf .fee,
+ .item .content .intro .intro-inf .acreage{
     color: #55B3D9;
 }
 
-.inf .body .detail .item .content .contact img{
+ .item .content .contact img{
     width: 20px;
     height: 20px;
 }
 
-.inf .body .detail .item .content .contact{
+ .item .content .contact{
     display: flex;
     justify-content: space-between;
     margin-right: 20px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile{
+ .item .content .contact .contact-profile{
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile:last-child{
+ .item .content .contact .contact-profile:last-child{
     margin-top: 10px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .name{
+ .item .content .contact .contact-profile .name{
     margin-left: 0px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .avt img{
+ .item .content .contact .contact-profile .avt img{
     width: 40px;
     height: 40px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .phone,
-.inf .body .detail .item .content .contact .contact-profile .zalo{
+ .item .content .contact .contact-profile .phone,
+ .item .content .contact .contact-profile .zalo{
     display: flex;
     gap: 10px;
     border: 1px solid #55B3D9;
@@ -775,43 +771,43 @@ flex-shrink: 0;
     color: #55B3D9;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .icon{
+ .item .content .contact .contact-profile .icon{
     width: 10%;
     display: flex;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .phone,
-.inf .body .detail .item .content .contact .contact-profile .zalo:hover{
+ .item .content .contact .contact-profile .phone,
+ .item .content .contact .contact-profile .zalo:hover{
     cursor: pointer;
     color: #fff;
     background-color: #55B3D9;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .phone:hover{
+ .item .content .contact .contact-profile .phone:hover{
     cursor: pointer;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .zalo:hover img{
+ .item .content .contact .contact-profile .zalo:hover img{
     display: block;
     background: #fff;
     border-radius: 5px;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .share,
-.inf .body .detail .item .content .contact .contact-profile .like{
+ .item .content .contact .contact-profile .share,
+ .item .content .contact .contact-profile .like{
     width: 25px;
     height: 25px;
     border: none;
     background: #fff;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .share:hover,
-.inf .body .detail .item .content .contact .contact-profile .like:hover{
+ .item .content .contact .contact-profile .share:hover,
+ .item .content .contact .contact-profile .like:hover{
     cursor: pointer;
 }
 
-.inf .body .detail .item .content .contact .contact-profile .share img,
-.inf .body .detail .item .content .contact .contact-profile .like img{
+ .item .content .contact .contact-profile .share img,
+ .item .content .contact .contact-profile .like img{
     margin-left: -5px;
 }
 
@@ -898,10 +894,6 @@ footer img{
     margin-right: 30px;
 }
 
-.full-name{
-    width: 200px;
-}
-
 @media (max-width: 991px){
     .body-content{
         margin-top: -150px;
@@ -953,8 +945,6 @@ footer img{
     .type{
         margin-left: 5%;
         gap: 10px;
-        display: grid;
-        grid-template-columns: 1fr 1fr;
     }
 
     .custom-dropdown-toggle{
@@ -970,14 +960,9 @@ footer img{
         display: none !important;
     }
 
-    .type .item{
-        width: 200px;
-    }
-
-    .type .item .name a{
+    .type .item .name{
         width: 80px;
         display: flex;
-        text-align: center;
     }
 
     .type .item:last-child .name{

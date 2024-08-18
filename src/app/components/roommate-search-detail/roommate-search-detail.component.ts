@@ -42,22 +42,9 @@ export class RoommateSearchDetailComponent {
   images =  [];
   img_main='';
 
-  constructor(private route: ActivatedRoute, private _api_post: PostsService){}
-  // changeImg() {
-  //   this.current_image_index = (this.current_image_index + 1) % this.images.length;
-  //   this.img_main = this.images[this.current_image_index];
-  // }
+  constructor(private _route: ActivatedRoute, private _api_post: PostsService){}
 
-  // share() {
-  //   const shareUrl = 'https://example.com'; 
-  //   window.open(shareUrl, '_blank'); 
-  // }
-
-  // IsLike(){
-  //   this.like=!this.like;
-  // }
-
-  Break() {
+  break() {
     var textElement = document.getElementById("des");
     var text = textElement?.innerHTML;
     var ngatDongText = text?.split('. ').join('.<br>') + '';
@@ -75,9 +62,9 @@ export class RoommateSearchDetailComponent {
   }
 
   ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
+    const id = this._route.snapshot.paramMap.get('id');
     this.showItem(id);
-    this.Break();
+    this.break();
   }
 
   showItem(idItem: any){

@@ -15,32 +15,15 @@ import { HttpParams } from '@angular/common/http';
 export class PostManagementComponent implements OnInit{
   posts: Post[] = [];
   user: any;
-  searchId='';
+  search_id: any;
+  currentStatus: string = 'active'; 
 
   constructor(private _postService: PostsService, private _manage_post: ManagePostService, 
     private _account_user: AccountUserService) {}
 
   ngOnInit(): void {
-    //this.listPosts('active');
-    // const token = this.token.getUser();
-    // if(token.roles ==="admin"){
-    //   this.manage_post.getPost1().subscribe(
-    //     response => {
-    //       this.posts=response;
-    //  } );
-    // }
-
-    
-    // this._account_user.getPost().subscribe(
-    //   (response => {
-    //     this.content=response;
-    //     console.log("Content1: ",response);
-    //     console.log("Content2: ",this.content);
-    //   })
-    // )
-
-    // this.listPosts('active');
-    this._manage_post.getPost1().subscribe(
+    this.listPosts('active');
+    this._manage_post.Call_API_ManageUser().subscribe(
       (response => {
         if(response.status == "ok"){
           this.user=response;
@@ -52,16 +35,20 @@ export class PostManagementComponent implements OnInit{
     )
   }
 
+
   filterStatusActive(status: string){
     this.listPosts(status);
+    this.currentStatus = status;
   }
+
   filterStatusBan(status: string){
     this.listPosts(status);
+    this.currentStatus = status;
   }
 
   searchID(item: any): void {
     const search_keyword = item.trim().toLowerCase();
-    this._postService.SearchPost({ SearchName: search_keyword }).subscribe(
+    this._postService.Call_API_Search_Post({ SearchName: search_keyword }).subscribe(
       (response: Post[]) => {
         this.posts = response.filter(post =>
           post.title.toLowerCase().includes(search_keyword)
@@ -78,7 +65,6 @@ export class PostManagementComponent implements OnInit{
     this._postService.Call_API_Search_Post(params).subscribe(
       (response: { results: Post[] })=> {
         this.posts=response.results;
-        // console.log(response);
         console.log('Admin Data:', response);
         if (status === 'active') {
           this.posts = this.posts.filter(post => post.status === 'active');
@@ -124,26 +110,4 @@ export class PostManagementComponent implements OnInit{
     }
   }
 
-  // Delete(item: number) {
-  //   const confirmed = window.confirm('Bạn có chắc chắn muốn xoá bài đăng này không?');
-  //   if(confirmed){
-  //     const index = this.posts.findIndex(post => post.id === item);
-  //     if (index !== -1) {
-  //         this.posts.splice(index, 1);
-  //     }
-  //     this.updateQuantities();
-  //   }
-  // }
-
-  // DeleteAll() {
-  //   const confirmed = window.confirm('Bạn có chắc chắn muốn xoá những bài đăng này không?');
-  //   if(confirmed){
-  //     for (let i = this.posts.length - 1; i >= 0; i--) {
-  //       if (this.posts[i].checked) {
-  //           this.posts.splice(i, 1);
-  //       }
-  //     }
-  //     this.Quantity();
-  //   }
-  // }
 }

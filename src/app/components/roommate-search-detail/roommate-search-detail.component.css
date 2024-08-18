@@ -48,7 +48,7 @@ body{
     position: relative;
     top: -12px;
     left: 12px;
-    background: var(--primary-color);
+    background: #55B3D9;
     border-radius: 50%;
     text-align: center;
     width: 25px;
@@ -140,7 +140,7 @@ body{
 
 .icon .name .inf-group:hover{
     cursor: pointer;
-    color: var(--primary-color);
+    color: #55B3D9;
 }
 
 .icon .name .logout{
@@ -245,7 +245,7 @@ body{
 
 .body .inf-room .detail .detail-content p{
     margin-top: 5px;
-    color: var(--primary-color);
+    color: #55B3D9;
 }
 
 .body .inf-room .detail .detail-icon img{
@@ -361,7 +361,7 @@ body{
     padding: 0 20px;
     height: 30px;
     border-radius: 5px;
-    border: 1px solid var(--primary-color);
+    border: 1px solid #55B3D9;
     background: #fff;
     font-weight: 600;
     margin-top: 20px;
@@ -369,7 +369,7 @@ body{
 }
 
 .body .inf-user button.tel{
-    background: var(--primary-color);
+    background: #55B3D9;
     color: #fff;
 }
 
@@ -377,8 +377,8 @@ body{
 .body .inf-user button.zalo:hover{
     cursor: pointer;
     color: grey;
-    background: var(--second-color);
-    border: 1px solid var(--second-color);
+    background: rgb(160, 217, 244);
+    border: 1px solid rgb(160, 217, 244);
 }
 
 .body .inf-user button img{

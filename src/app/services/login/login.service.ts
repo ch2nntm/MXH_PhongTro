@@ -16,7 +16,7 @@ export class LoginService{
   }
 
   login(credential: any): Observable<any> {
-    return this._api.postTypeRequest('login', {
+    return this._api.API_Basic_PostTypeRequest('login', {
       email: credential.email,
       password: credential.password
     }).pipe(
@@ -41,6 +41,6 @@ export class LoginService{
   }
 
   ShowUser(requestBody: any): Observable<any>{
-    return this._api.postTypeRequest('login?'+requestBody, requestBody);
+    return this._api.API_Basic_PostTypeRequest('login?'+requestBody, requestBody);
   }
 }

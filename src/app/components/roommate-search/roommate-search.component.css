@@ -894,6 +894,10 @@ footer img{
     margin-right: 30px;
 }
 
+.full-name{
+    width: 200px;
+}
+
 @media (max-width: 991px){
     .body-content{
         margin-top: -150px;

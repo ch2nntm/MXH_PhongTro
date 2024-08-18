@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ManagePostService } from '../../services/manage-post/manage-post.service';
+import { UserVerifyService } from '../../services/user-verify/user-verify.service';
 
 @Component({
   selector: 'app-approve-landlord-application',
@@ -54,7 +56,9 @@ export class ApproveLandlordApplicationComponent {
     avt: '',
     cccd: ''
   }
+  http: any;
  
+  constructor(private _manage_user: ManagePostService, private _manage_verify_user: UserVerifyService){}
 
   DetailInf(item: any):void{
     this.infChild = item;
@@ -91,10 +95,26 @@ export class ApproveLandlordApplicationComponent {
         this.infs.splice(index, 1);
     }
     this.DetailInf('');
-    // window.location.reload();
   }
 
   CloseDetail(){
     this.isClickItem=false;
   }
+
+  getVerificationDetails() {
+    this._manage_verify_user.Call_API_ManageUser()
+    .subscribe((response: any) => {
+      const userId = response.id; 
+      this.getUserDetails(userId);
+    });
+  }
+
+  getUserDetails(userId: string) {
+    this._manage_user.Call_API_ManageUserID(userId)
+    .subscribe((userDetails: any) => {
+      console.log(userDetails);
+      this.infs = userDetails;
+    });
+  }
+  
 }

@@ -21,10 +21,10 @@ export class AuthGuardService implements CanActivate {
       if (requiredRoles.length === 0 || requiredRoles.includes(currentUser.roles)) {
         return true;
       }
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
       return false;
     }
-    this.router.navigate(['']);
+    this.router.navigate(['register/']);
     return false;
   }
 }

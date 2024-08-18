@@ -333,6 +333,6 @@ export class RentRoomComponent {
   }
 
   navigateToDetail(itemId: any): void {
-    this._router.navigate(['/detailroommate', itemId]);
+    this._router.navigate(['uiuser/detailrentroom', itemId]);
   }
 }

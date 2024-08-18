@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ManagePostService } from '../../services/manage-post/manage-post.service';
 
 @Component({
   selector: 'app-user-list',
@@ -97,7 +98,7 @@ export class UserListComponent {
     this.selectedItem=this.items[0];
   }
 
-  constructor(){
+  constructor(private _manage_user: ManagePostService){
     this.Quantity();
   }
 
@@ -117,4 +118,12 @@ export class UserListComponent {
     }
     this.Quantity();
   }
+
+  getUserDetails(userId: string) {
+    this._manage_user.Call_API_ManageUser()
+    .subscribe((userDetails: any) => {
+      console.log(userDetails);
+    });
+  }
+  
 }

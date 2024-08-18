@@ -16,8 +16,8 @@ export class RegisterService {
     this.user = this.userSubject.asObservable();
   }
 
-  register(credential: any): Observable<any> {
-    return this._api.postTypeRequest('register', {
+  Call_API_Register(credential: any): Observable<any> {
+    return this._api.API_Basic_PostTypeRequest('register', {
       email: credential.email,
       password: credential.password,
       name: credential.name,

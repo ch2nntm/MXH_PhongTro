@@ -71,15 +71,15 @@ export class RoommateSearchComponent {
   ngOnInit(): void {
     this.fetchCities();
     this.listPosts();
-    this._user.get_Post().subscribe({
-      next: (response: { contents: Post[] }) => {
-        console.log("Content: ", response.contents);
-        this.content = response.contents;
-      },
-      error: (error) => {
-        console.error("Error fetching posts:", error);
-      }
-    });
+    // this._user.Call_API_GetPost().subscribe({
+    //   next: (response: { contents: Post[] }) => {
+    //     console.log("Content: ", response.contents);
+    //     this.content = response.contents;
+    //   },
+    //   error: (error) => {
+    //     console.error("Error fetching posts:", error);
+    //   }
+    // });
   }
 
   toggleArrow(item: string) {
@@ -307,7 +307,7 @@ export class RoommateSearchComponent {
   }
 
   navigateToDetail(itemId: any): void {
-    this._router.navigate(['/detailroommate', itemId]);
+    this._router.navigate(['uiuser/detailroommate', itemId]);
   }
     
 }

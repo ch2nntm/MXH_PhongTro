@@ -10,7 +10,7 @@ export class AccountUserService {
   private apiUrl='http://localhost:5000/api/my-content';
   constructor(private http: HttpClient, private token: TokenStoreService) { }
 
-  get_Post(): Observable<any>{
+  Call_API_GetPost(): Observable<any>{
     const token = this.token.getToken();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,

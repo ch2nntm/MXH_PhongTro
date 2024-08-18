@@ -121,6 +121,22 @@
     margin-left: 300px;
 }
 
+.body .content .kind button {
+    background-color: transparent;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.body .content .kind button.active-button {
+    font-weight: bold;
+}
+  
+.body .content .kind button.ban-button {
+    font-weight: bold;
+}
+
 .content-menu {
     float: left;
     margin-left: -41px;

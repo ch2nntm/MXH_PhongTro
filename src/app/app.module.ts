@@ -43,6 +43,7 @@ import { EditUserComponent } from './components/edit-user/edit-user.component';
 import { RegisterOwnerContentComponent } from './components/register-owner-content/register-owner-content.component';
 import { AuthGuardService } from './services/authguard/authguardservice.guard';
 import { MyInterceptor } from './services/my-interceptor/my-interceptor.service';
+import { ItemroommateComponent } from './components/itemroommate/itemroommate/itemroommate.component';
 
 
 @NgModule({
@@ -83,7 +84,8 @@ import { MyInterceptor } from './services/my-interceptor/my-interceptor.service'
     HistoryComponent,
     PostManagementComponent,
     RentRoomComponent,
-    RoommateSearchComponent
+    RoommateSearchComponent,
+    ItemroommateComponent
   ],
   imports: [
     BrowserModule,

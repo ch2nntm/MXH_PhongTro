@@ -11,15 +11,15 @@
         <div class="content">
             <h1>Danh sách bài đăng</h1>
             <div class="search-box">
-                <input type="text" [(ngModel)]="searchId"/>
-                <button (click)="searchID(searchId)">
+                <input type="text" [(ngModel)]="search_id"/>
+                <button (click)="searchID(search_id)">
                     <img src="public/search.png"/>
                 </button>                
             </div>
             <div class="name-kind">
                 <div class="kind">
-                    <button (click)="filterStatusActive('active')">Hoạt động</button>
-                    <button (click)="filterStatusBan('ban')">Bị cấm</button>
+                    <button (click)="filterStatusActive('active')" [ngClass]="{'active-button': currentStatus === 'active'}">Hoạt động</button>
+                    <button (click)="filterStatusBan('ban')" [ngClass]="{'ban-button': currentStatus === 'ban'}">Bị cấm</button>
                 </div>
                <div class="container">
                     <div class="">

@@ -1,0 +1,52 @@
+<div class="item" (click)="onItemClicked()">
+    <div class="img">
+        <div class="img-child" *ngIf="inf.images.length > 0">
+            <img [src]="inf.images[0]"/>
+        </div>
+        <div class="img-child" *ngIf="inf.images.length > 1">
+            <img *ngFor="let img of inf.images.slice(1)" [src]="img"/>
+        </div>
+    </div>
+    
+    <div class="content">
+        <div class="intro">
+            <h3>
+                {{inf.description}}
+            </h3>
+            <div class="intro-inf d-flex flex-wrap">
+                <p class="fee">{{inf.price}} / tháng</p>
+                <p class="acreage">{{inf.acreage}}m<sup>2</sup>  </p>
+                <p class="address">{{ getFullAddress(inf.address) }}</p>
+            </div>
+        </div>
+        <div class="contact d-flex flex-wrap">
+            <div class="contact-profile">
+                <div class="avt">
+                    <img src="public/Avatar.png"/>
+                </div>
+                <div class="col-6 col-sm-6 d-flex flex-wrap name">
+                    <p class="full-name">{{inf.user.name}}</p>
+                    <p class="time">{{ formatDate(inf.createDate.toString())}}</p>
+                </div>
+            </div>
+            <div class="contact-profile d-flex flex-wrap">
+                <button class="phone" (click)="callPhoneNumber('0948394832')">
+                    <img src="public/telephone.png"/>
+                    <p>0948394832</p>
+                </button>
+                <button class="zalo" (click)="openZaloMessage('0948394832')">
+                    <img src="public/zalo-logo.png"/>
+                    <p>Liên hệ Zalo</p>
+                </button>
+                <div class="icon">
+                    <button class="share">
+                        <img src="public/share.png"/>
+                    </button>
+                    <button class="like">
+                        <i class="bi bi-suit-heart"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
